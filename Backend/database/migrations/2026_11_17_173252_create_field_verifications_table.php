@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('field_verifications', function (Blueprint $table) {
+       Schema::create('field_verifications', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('case_id')->constrained('medical_cases');
+            $table->foreignId('case_category_id')->constrained('case_categories');
+            $table->integer('social_score');
+            $table->integer('financial_status_score');
+            $table->string('decision', 20);
+            $table->text('notes')->nullable();
+            $table->timestamp('verified_at');
         });
     }
 

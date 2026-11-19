@@ -10,10 +10,12 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('partner_user', function (Blueprint $table) {
+    {Schema::create('partner_user', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('partner_id')->constrained('partners');
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('position', 100);
+            $table->unique(['partner_id', 'user_id']);
         });
     }
 

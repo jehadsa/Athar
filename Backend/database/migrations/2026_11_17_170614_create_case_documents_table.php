@@ -11,8 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('case_documents', function (Blueprint $table) {
+       Schema::create('case_documents', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('case_id')->constrained('medical_cases')->cascadeOnDelete();
+            $table->foreignId('case_category_id')->constrained('case_categories')->cascadeOnDelete();
+            $table->string('doc_type', 30);
+            $table->string('file_path', 500);
+            $table->string('original_name', 255);
+            $table->string('mime_type', 100);
+            $table->boolean('is_confidential')->default(false);
             $table->timestamps();
         });
     }

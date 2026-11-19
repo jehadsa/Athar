@@ -11,8 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('case_updates', function (Blueprint $table) {
+       Schema::create('case_updates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('case_id')->constrained('medical_cases')->cascadeOnDelete();
+            $table->foreignId('case_category_id')->constrained('case_categories')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('update_type', 30);
+            $table->string('title', 255);
+            $table->text('description');
+            $table->string('attachment_path', 500)->nullable();
             $table->timestamps();
         });
     }
