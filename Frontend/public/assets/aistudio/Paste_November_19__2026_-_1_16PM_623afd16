@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-primary-fixed": "#001d32",
+          "error-container": "#ffdad6",
+          "on-tertiary": "#ffffff",
+          "secondary": "#00696d",
+          "inverse-on-surface": "#ecf1ff",
+          "on-primary": "#ffffff",
+          "on-secondary-container": "#007074",
+          "tertiary-fixed": "#ffdea1",
+          "surface-tint": "#316289",
+          "surface-bright": "#f9f9ff",
+          "inverse-surface": "#263143",
+          "on-tertiary-container": "#eebc4d",
+          "secondary-fixed": "#94f2f7",
+          "background": "#f9f9ff",
+          "surface-container-low": "#f0f3ff",
+          "on-surface-variant": "#41474e",
+          "secondary-fixed-dim": "#77d5da",
+          "on-error-container": "#93000a",
+          "on-primary-fixed-variant": "#124a70",
+          "surface-container-lowest": "#ffffff",
+          "primary-fixed": "#cde5ff",
+          "tertiary-fixed-dim": "#f2bf50",
+          "on-tertiary-fixed-variant": "#5c4300",
+          "surface-container-high": "#dee8ff",
+          "surface-variant": "#d8e3fb",
+          "on-secondary-fixed-variant": "#004f52",
+          "on-secondary-fixed": "#002021",
+          "surface-container": "#e7eeff",
+          "primary-container": "#20547a",
+          "surface-container-highest": "#d8e3fb",
+          "secondary-container": "#94f2f7",
+          "surface": "#f9f9ff",
+          "on-primary-container": "#99c8f4",
+          "error": "#ba1a1a",
+          "on-surface": "#111c2d",
+          "tertiary-container": "#684c00",
+          "on-secondary": "#ffffff",
+          "outline-variant": "#c1c7cf",
+          "outline": "#72787f",
+          "on-error": "#ffffff",
+          "surface-dim": "#cfdaf2",
+          "tertiary": "#4c3600",
+          "primary": "#003d60",
+          "on-tertiary-fixed": "#261900",
+          "inverse-primary": "#9ccbf7",
+          "primary-fixed-dim": "#9ccbf7",
+          "on-background": "#111c2d"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-xl": "2.5rem",
+          "margin": "2rem",
+          "gutter-sm": "1rem",
+          "margin-sm": "1rem",
+          "gutter": "1.5rem",
+          "space-xs": "0.25rem",
+          "space-sm": "0.5rem",
+          "space-lg": "1.5rem",
+          "space-md": "1rem"
+        },
+        "fontFamily": {
+          "body-sm": [
+            "Cairo"
+          ],
+          "body-md": [
+            "Cairo"
+          ],
+          "headline-sm": [
+            "Cairo"
+          ],
+          "headline-lg-mobile": [
+            "Cairo"
+          ],
+          "display": [
+            "Cairo"
+          ],
+          "title-md": [
+            "Cairo"
+          ],
+          "label-md": [
+            "Cairo"
+          ],
+          "body-lg": [
+            "Cairo"
+          ],
+          "display-mobile": [
+            "Cairo"
+          ],
+          "headline-md": [
+            "Cairo"
+          ],
+          "label-sm": [
+            "Cairo"
+          ],
+          "headline-lg": [
+            "Cairo"
+          ],
+          "numeral-md": [
+            "Inter"
+          ],
+          "numeral-lg": [
+            "Inter"
+          ]
+        },
+        "fontSize": {
+          "body-sm": [
+            "12px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-sm": [
+            "20px",
+            {
+              "lineHeight": "30px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "24px",
+            {
+              "lineHeight": "36px",
+              "fontWeight": "700"
+            }
+          ],
+          "display": [
+            "40px",
+            {
+              "lineHeight": "56px",
+              "fontWeight": "800"
+            }
+          ],
+          "title-md": [
+            "18px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-md": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "600"
+            }
+          ],
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "500"
+            }
+          ],
+          "display-mobile": [
+            "30px",
+            {
+              "lineHeight": "44px",
+              "fontWeight": "800"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "36px",
+              "fontWeight": "700"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "32px",
+            {
+              "lineHeight": "46px",
+              "fontWeight": "700"
+            }
+          ],
+          "numeral-md": [
+            "18px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "numeral-lg": [
+            "28px",
+            {
+              "lineHeight": "34px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-surface font-body-md text-on-surface min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="bg-primary text-on-primary py-space-xs"><div class="w-full max-w-[1280px] mx-auto px-margin flex items-center justify-between font-label-sm text-label-sm"><div class="flex items-center gap-space-md"><span class="flex items-center gap-space-xs text-secondary-fixed"><span class="material-symbols-outlined text-[16px]">e911_emergency</span>حالات طارئة تستوجب التدخل الجراحي الفوري</span><span class="hidden md:inline-block text-outline-variant">|</span><span class="hidden md:flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">phone_in_talk</span>الرقم المجاني: 8001240000</span></div><div class="flex items-center gap-space-sm"><span class="text-surface-variant font-label-sm">التبديل السريع للمعاينة:</span><div class="flex items-center gap-space-xs bg-primary-container px-space-xs py-0.5 rounded-full"><a class="px-space-xs py-0.5 rounded-full text-on-primary hover:bg-primary transition-all" data-path="home" href="#">عام</a><a class="px-space-xs py-0.5 rounded-full text-primary-fixed hover:bg-primary transition-all" data-path="patient-portal" href="#">المريض</a><a class="px-space-xs py-0.5 rounded-full text-primary-fixed hover:bg-primary transition-all" data-path="donor-portal" href="#">المتبرع</a><a class="px-space-xs py-0.5 rounded-full text-primary-fixed hover:bg-primary transition-all" data-path="hospital-portal" href="#">المستشفى</a><a class="px-space-xs py-0.5 rounded-full text-primary-fixed hover:bg-primary transition-all" data-path="charity-portal" href="#">الجمعية</a><a class="px-space-xs py-0.5 rounded-full text-primary-fixed hover:bg-primary transition-all" data-path="admin-portal" href="#">الإشراف</a></div><button class="px-space-xs text-secondary-fixed hover:text-on-primary transition-colors">EN</button></div></div></div><div class="h-20 w-full max-w-[1280px] mx-auto px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm"><img alt="Athar Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB3OZgQRDoDcoqauz27t1Qnbu6eohpdNr4Km8vZcPlpk7U02MIxFgpckpOA9G4O70atsXSuPdeSQfNhIc4kbC2AcSlb5VsFvFAXEi-avYA_5QHQUrZQ6tzbeW35hfftCu6pksMuGS-QpNRtEmEfrgIXFzQT5NUVZrej3pfLRF90rP7xzT-oxpgtYeimHrzBSs5FWThhzOzTgAC1QqMfbXvNYUC3w6c2gQpsbgUwSC3_"/><span class="font-headline-sm text-headline-sm text-primary">أثر</span></div><nav class="hidden xl:flex items-center gap-space-sm" data-active-classes="bg-surface-container text-primary font-bold rounded-lg"><a aria-current="page" class="px-space-sm py-space-xs transition-colors bg-surface-container text-primary font-bold rounded-lg" data-path="home" href="#">الرئيسية</a><a class="px-space-sm py-space-xs font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" data-path="medical-cases" href="#">الحالات الطبية</a><a class="px-space-sm py-space-xs font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" data-path="how-it-works" href="#">كيف نعمل</a><a class="px-space-sm py-space-xs font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" data-path="medical-partners" href="#">شركاؤنا الطبيون</a><a class="px-space-sm py-space-xs font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" data-path="transparency-reports" href="#">تقارير الأثر والشفافية</a><a class="px-space-sm py-space-xs font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" data-path="about-athar" href="#">عن المنصة</a></nav></div><div class="flex items-center gap-space-sm"><div class="hidden md:flex items-center bg-surface-container-low rounded-xl px-space-sm py-space-xs"><span class="material-symbols-outlined text-outline text-[20px] ml-space-xs">search</span><input class="bg-transparent font-body-sm text-body-sm text-on-surface focus:outline-none w-44 placeholder:text-outline-variant" placeholder="ابحث عن حالة أو تخصص..." type="text"/></div><a class="px-space-md py-space-xs rounded-xl bg-tertiary-fixed text-tertiary font-label-md text-label-md hover:bg-tertiary-fixed-dim hover:text-on-tertiary-fixed-variant transition-all flex items-center gap-space-xs" data-path="medical-cases" href="#">تبرع الآن</a><a class="hidden sm:flex px-space-md py-space-xs rounded-xl bg-secondary text-on-secondary font-label-md text-label-md hover:bg-on-secondary-container hover:text-on-secondary transition-all items-center gap-space-xs" data-path="apply-case" href="#">طلب علاج</a><a class="p-space-xs rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" data-path="auth-login" href="#"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></a></div></div></header><main class="w-full pt-28 bg-surface"><div class="flex flex-col w-full">
+<!-- Hero Section with Ambient Glow and Triage Filter -->
+<section class="relative w-full overflow-hidden pb-space-xl pt-space-lg">
+<!-- Atmospheric Ambient Circles (contained within parent) -->
+<div class="absolute -top-32 right-10 w-96 h-96 rounded-full bg-secondary-fixed/20 blur-3xl pointer-events-none"></div>
+<div class="absolute top-48 left-0 w-[500px] h-[500px] rounded-full bg-primary-fixed/30 blur-3xl pointer-events-none"></div>
+<div class="w-full max-w-[1280px] mx-auto px-margin relative z-10">
+<!-- Breadcrumb / Status Pill -->
+<div class="flex items-center gap-space-xs mb-space-md">
+<span class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-high text-primary font-label-md text-label-md shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+          المنصة الوطنية المعتمدة للإسناد العلاجي التشاركي
+        </span>
+</div>
+<!-- Main Asymmetric Hero Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center mb-space-xl">
+<div class="lg:col-span-7 flex flex-col space-y-space-md text-right">
+<h1 class="font-display text-display text-primary leading-tight">
+            أثر — مجتمع متكامل <br/>
+<span class="text-secondary">لصناعة الشفاء</span> وتفريج الكرب الطبي
+          </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+            نجسّر المسافة بأعلى معايير الشفافية بين أصحاب الأيادي البيضاء والمرضى الأشد حاجة، بإشراف طبي محكم وسداد مباشر بنسبة 100% للمستشفيات والمراكز الجراحية المعتمدة دون أي وسيط نقدي.
+          </p>
+<!-- Dual Primary CTAs -->
+<div class="flex flex-wrap items-center gap-space-md pt-space-xs">
+<a class="px-space-lg py-space-md rounded-xl bg-tertiary-fixed text-tertiary font-title-md text-title-md hover:bg-tertiary-fixed-dim shadow-lg shadow-tertiary-fixed/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-space-xs" data-path="medical-cases" href="#">
+<span class="material-symbols-outlined text-[24px]">volunteer_activism</span>
+              تبرع الآن للحالات الحرجة
+            </a>
+<a class="px-space-lg py-space-md rounded-xl bg-surface-container-lowest text-secondary font-title-md text-title-md shadow-md hover:bg-surface-container-low hover:text-on-secondary-container transition-all flex items-center gap-space-xs" data-path="apply-case" href="#">
+<span class="material-symbols-outlined text-[24px]">medical_services</span>
+              تقديم طلب مساعدة علاجية
+            </a>
+</div>
+<!-- Trust Badges Strip -->
+<div class="pt-space-md flex flex-wrap items-center gap-space-md text-on-surface-variant font-label-md text-label-md">
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-space-xs rounded-lg">
+<span class="material-symbols-outlined text-secondary text-[20px]">verified</span>
+<span>مرخص رسمياً</span>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-space-xs rounded-lg">
+<span class="material-symbols-outlined text-secondary text-[20px]">health_and_safety</span>
+<span>إشراف طبي مستقل</span>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-space-xs rounded-lg">
+<span class="material-symbols-outlined text-secondary text-[20px]">fact_check</span>
+<span>توثيق الحالات بنسبة 100%</span>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-space-xs rounded-lg">
+<span class="material-symbols-outlined text-secondary text-[20px]">balance</span>
+<span>متوافق مع الهيئة الشرعية</span>
+</div>
+</div>
+</div>
+<!-- Hero Visual / Clinical Compass Card -->
+<div class="lg:col-span-5 relative">
+<div class="relative bg-surface-container-lowest rounded-2xl p-space-md shadow-xl overflow-hidden">
+<div class="relative h-72 w-full rounded-xl overflow-hidden mb-space-md">
+<img class="w-full h-full object-cover" data-alt="Warm and respectful photograph inside a modern Saudi specialized hospital room, showing a gentle clinical team consulting a recovering patient with soft cinematic lighting, navy blue and teal medical scrubs, high resolution, dignified Saudi healthcare setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAGa1HcJKF0HO-y5ac5jw_eHcyOwl3u9TlL-TFdC7zGveA93Ms_JPrMYWMMUwzLgf18M6Pz65mHJOQOU5MbeXgUo1PH_B2RpXeCiFeC28jLdcNa7VbAWVDjD5UnNLdg5s2V7Ynxblal9tsx0kBP_2xEOSjHyMZSBkFRUZR8Tucmt-S6U3HchueMqeh_bqZ8gy9XoMSUZQGafsD5uqL3N6Lap3lELTbEjr9t-Z1M0NV"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent flex items-end p-space-md">
+<div class="text-on-primary">
+<span class="inline-block px-space-xs py-0.5 rounded bg-tertiary-fixed text-tertiary font-label-sm text-label-sm mb-1">تدخل فوري معتمد</span>
+<p class="font-headline-sm text-headline-sm">المسار الجراحي التعجيلي رقم #8491</p>
+</div>
+</div>
+</div>
+<!-- Mini Live Ticker inside visual module -->
+<div class="bg-surface-container-low rounded-xl p-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined text-[20px]">local_hospital</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">الجهة الطبية المنفذة</p>
+<p class="font-title-md text-title-md text-primary">مدينة الملك فهد الطبية</p>
+</div>
+</div>
+<span class="text-secondary font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+                تحويل مباشر
+              </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Triage Filter Bar -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-md">
+<form class="grid grid-cols-1 md:grid-cols-12 gap-space-sm items-center" onsubmit="event.preventDefault();">
+<div class="md:col-span-4 flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">التخصص الطبي الدقيق</label>
+<div class="flex items-center bg-surface-container-low rounded-xl px-space-sm py-space-xs">
+<span class="material-symbols-outlined text-secondary ml-space-xs">cardiology</span>
+<select class="bg-transparent w-full font-body-md text-body-md text-on-surface focus:outline-none cursor-pointer">
+<option value="">كافة التخصصات الطبية</option>
+<option value="heart">جراحة وزراعة القلب</option>
+<option value="oncology">علاج الأورام والكيماوي</option>
+<option value="dialysis">غسيل ورعاية الفشل الكلوي</option>
+<option value="eyes">جراحة العيون والشبكية</option>
+<option value="pediatrics">جراحات الأطفال الدقيقة</option>
+</select>
+</div>
+</div>
+<div class="md:col-span-3 flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">المنطقة والمدينة</label>
+<div class="flex items-center bg-surface-container-low rounded-xl px-space-sm py-space-xs">
+<span class="material-symbols-outlined text-secondary ml-space-xs">location_on</span>
+<select class="bg-transparent w-full font-body-md text-body-md text-on-surface focus:outline-none cursor-pointer">
+<option value="">جميع مناطق المملكة</option>
+<option value="riyadh">الرياض والمحافظات</option>
+<option value="makkah">مكة المكرمة وجدة</option>
+<option value="eastern">المنطقة الشرقية</option>
+<option value="asir">عسير والمناطق الجنوبية</option>
+<option value="medina">المدينة المنورة وينبع</option>
+</select>
+</div>
+</div>
+<div class="md:col-span-3 flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">أولوية التدخل</label>
+<div class="flex items-center bg-surface-container-low rounded-xl px-space-sm py-space-xs">
+<span class="material-symbols-outlined text-secondary ml-space-xs">speed</span>
+<select class="bg-transparent w-full font-body-md text-body-md text-on-surface focus:outline-none cursor-pointer">
+<option value="">جميع درجات الخطورة</option>
+<option value="critical">حالات حرجة جداً (تدخل أسبوعي)</option>
+<option value="urgent">حالات مستعجلة</option>
+<option value="nearly_completed">أوشكت على الاكتمال</option>
+</select>
+</div>
+</div>
+<div class="md:col-span-2 flex flex-col justify-end pt-5 md:pt-0">
+<button class="w-full h-12 bg-primary hover:bg-primary-container text-on-primary font-title-md text-title-md rounded-xl shadow-md transition-all flex items-center justify-center gap-space-xs" type="submit">
+<span class="material-symbols-outlined text-[20px]">search</span>
+              تصفية الحالات
+            </button>
+</div>
+</form>
+</div>
+</div>
+</section>
+<!-- Live Impact Ticker & Statistics -->
+<section class="w-full bg-surface-container-low py-space-xl">
+<div class="w-full max-w-[1280px] mx-auto px-margin">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-space-lg gap-space-sm">
+<div>
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider font-semibold">المؤشرات المباشرة للشفافية</span>
+<h2 class="font-headline-lg text-headline-lg text-primary">أثر عطائكم بالأرقام الحية</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+          تُحدّث البيانات بصورة لحظية ومباشرة من خلال الربط التقني مع المنظومة المالية للمستشفيات الشريكة.
+        </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed text-primary flex items-center justify-center mb-space-md">
+<span class="material-symbols-outlined text-[28px]">payments</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">إجمالي التبرعات الموجهة</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-numeral-lg text-numeral-lg text-primary font-bold">48,250,900</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-bold">ر.س</span>
+</div>
+<div class="mt-space-sm flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">arrow_circle_up</span>
+<span>نسبة تحويل 100% مباشرة للعمليات</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center mb-space-md">
+<span class="material-symbols-outlined text-[28px]">medical_services</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">العمليات الجراحية المنجزة</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-numeral-lg text-numeral-lg text-primary font-bold">1,842</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">عملية ناجحة</span>
+</div>
+<div class="mt-space-sm flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>بنسبة نجاح طبي بلغت 98.4%</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed text-tertiary flex items-center justify-center mb-space-md">
+<span class="material-symbols-outlined text-[28px]">groups</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">المرضى المستفيدون وأسرهم</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-numeral-lg text-numeral-lg text-primary font-bold">4,120</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">مستفيد مباشر</span>
+</div>
+<div class="mt-space-sm flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span>تدقيق اجتماعي مسحي شامل</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest text-primary flex items-center justify-center mb-space-md">
+<span class="material-symbols-outlined text-[28px]">domain</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">المستشفيات والشركاء المعتمدون</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-numeral-lg text-numeral-lg text-primary font-bold">78</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">منشأة ومجمع تخصصي</span>
+</div>
+<div class="mt-space-sm flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">handshake</span>
+<span>تغطية لـ 13 منطقة بالمملكة</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Urgent Medical Cases -->
+<section class="w-full py-space-xl">
+<div class="w-full max-w-[1280px] mx-auto px-margin">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-space-lg">
+<div>
+<div class="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm mb-space-xs">
+<span class="material-symbols-outlined text-[16px]">emergency</span>
+            أولوية قصوى - وقت الاستجابة حرج
+          </div>
+<h2 class="font-headline-lg text-headline-lg text-primary">حالات طبية حرجة تستوجب التدخل العاجل</h2>
+</div>
+<a class="mt-space-sm md:mt-0 font-title-md text-title-md text-secondary hover:text-on-secondary-container flex items-center gap-1 transition-colors" data-path="medical-cases" href="#">
+<span>عرض كافة الحالات المعتمدة</span>
+<span class="material-symbols-outlined text-[20px] rotate-180">arrow_right_alt</span>
+</a>
+</div>
+<!-- Cases Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+<!-- Case 1: زراعة قوقعة -->
+<article class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group">
+<div class="relative h-56 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close up medical portrait of an innocent four-year-old child in an audiology clinic with gentle pediatric audiologist adjusting a hearing implant headset, clean clinical ambient lighting, navy and teal hospital decor, realistic photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmGHdRCUK8TR0GsNnKh2FPqET3lubbpmDL4vVY-L2d30wSlvnsV4S17jXiC-zG_WRvRPIqvdHavNAXB3uWTPo-BjksuuhVTC-oFD7Fj3AkdwO5AinJkGeEwN3AbGEgRGgv_vYkfwUnidRDkNV4KpfqIDcNlZiVbi4gd2rkE1wXxS483NtfY72zjlXgS_Bq0VgsdJOcrstGhgbPkbD05SWHA1w5sAINExy4hqTmNScA"/>
+<div class="absolute top-space-sm right-space-sm flex gap-space-xs">
+<span class="px-space-sm py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-secondary font-label-sm text-label-sm flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">hearing</span>
+                جراحة الأذن والسمع
+              </span>
+</div>
+<div class="absolute top-space-sm left-space-sm">
+<span class="px-space-sm py-1 rounded-full bg-error text-on-error font-label-sm text-label-sm shadow-sm">
+                متبقي 6 أيام
+              </span>
+</div>
+</div>
+<div class="p-space-lg flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm mb-space-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_on</span>
+                  مستشفى الملك فيصل التخصصي - الرياض
+                </span>
+<span class="font-numeral-md text-numeral-md text-outline">#ATH-4091</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-space-xs">زراعة قوقعة أذن إلكترونية لطفل (4 سنوات)</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mb-space-md">
+                فقدان سمع حسي عصبي حاد ومزدوج. إجراء العملية قبل سن الخامسة يضمن استعادة النطق والاندماج الطبيعي في الحياة.
+              </p>
+</div>
+<!-- Financial Bar & Donation Module -->
+<div class="space-y-space-sm pt-space-xs bg-surface-container-low/50 p-space-sm rounded-xl">
+<div class="flex justify-between items-baseline font-body-sm text-body-sm">
+<div>
+<span class="text-on-surface-variant">تم جمع: </span>
+<span class="font-numeral-md text-numeral-md text-primary font-bold">68,000</span>
+<span class="text-on-surface-variant">ر.س</span>
+</div>
+<div>
+<span class="text-on-surface-variant">الهدف: </span>
+<span class="font-numeral-md text-numeral-md text-on-surface font-semibold">85,000</span>
+<span class="text-on-surface-variant">ر.س</span>
+</div>
+</div>
+<!-- Progress bar: 80% -->
+<div class="w-full h-3 bg-surface-container-high rounded-full overflow-hidden relative">
+<div class="h-full bg-gradient-to-l from-secondary to-tertiary-fixed-dim rounded-full transition-all duration-700" style="width: 80%;"></div>
+</div>
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-secondary font-bold">متبقي: 17,000 ر.س فقط</span>
+<span class="font-numeral-md text-numeral-md text-primary font-bold">80%</span>
+</div>
+<!-- Quick Presets -->
+<div class="grid grid-cols-3 gap-space-xs pt-space-xs">
+<button class="py-space-xs rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/40 text-primary font-numeral-md text-numeral-md font-bold transition-colors" type="button">50 ر.س</button>
+<button class="py-space-xs rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/40 text-primary font-numeral-md text-numeral-md font-bold transition-colors" type="button">100 ر.س</button>
+<button class="py-space-xs rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/40 text-primary font-numeral-md text-numeral-md font-bold transition-colors" type="button">500 ر.س</button>
+</div>
+<button class="w-full h-12 mt-space-xs rounded-xl bg-tertiary-fixed text-tertiary font-title-md text-title-md hover:bg-tertiary-fixed-dim transition-all flex items-center justify-center gap-space-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+                تبرع الآن للحالة
+              </button>
+</div>
+</div>
+</article>
+<!-- Case 2: غسيل كلى ورعاية عاجلة -->
+<article class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group">
+<div class="relative h-56 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Respectful hospital photo showing a senior patient sitting in a dialysis therapy chair with clinical monitoring devices, clean bright healthcare center in Jeddah Saudi Arabia, soft lighting, professional nurse checking drip" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABQm0Uvl_oSpQ2w6TJ3WEn_R6KsWSWcYyRynw4fPVPu3MfwuLhJ6BJaY3iOgojRU25uML47rt61Gfet68FMmpep8yC2aNaWYjynRx9_kMzl3TnX3y7v3QRercHIw9MIEgedSA4FugM5kMPKZd_AA1BCyEUmOcD8JFPl8Y0njluIlC19iV6P3mtaOxdAKSKtrnbwfcGLbIEvXAzQ22TXu0yyR_A_w9Yk_2Ntkkxb3Q_"/>
+<div class="absolute top-space-sm right-space-sm flex gap-space-xs">
+<span class="px-space-sm py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-secondary font-label-sm text-label-sm flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">water_drop</span>
+                غسيل الكلى المستمر
+              </span>
+</div>
+<div class="absolute top-space-sm left-space-sm">
+<span class="px-space-sm py-1 rounded-full bg-tertiary-fixed text-tertiary font-label-sm text-label-sm shadow-sm">
+                متبقي 9 أيام
+              </span>
+</div>
+</div>
+<div class="p-space-lg flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm mb-space-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_on</span>
+                  مستشفى المركز الطبي الدولي - جدة
+                </span>
+<span class="font-numeral-md text-numeral-md text-outline">#ATH-8219</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-space-xs">جلسات غسيل كلى ورعاية مستمرة لمسن (67 سنة)</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mb-space-md">
+                فشل كلوي مزمن من المرحلة الخامسة يتطلب 3 جلسات غسيل كلى أسبوعياً مع الأدوية المثبطة لمنع حدوث تسمم دموي حاد.
+              </p>
+</div>
+<!-- Financial Bar & Donation Module -->
+<div class="space-y-space-sm pt-space-xs bg-surface-container-low/50 p-space-sm rounded-xl">
+<div class="flex justify-between items-baseline font-body-sm text-body-sm">
+<div>
+<span class="text-on-surface-variant">تم جمع: </span>
+<span class="font-numeral-md text-numeral-md text-primary font-bold">32,400</span>
+<span class="text-on-surface-variant">ر.س</span>
+</div>
+<div>
+<span class="text-on-surface-variant">الهدف: </span>
+<span class="font-numeral-md text-numeral-md text-on-surface font-semibold">36,000</span>
+<span class="text-on-surface-variant">ر.س</span>
+</div>
+</div>
+<!-- Progress bar: 90% -->
+<div class="w-full h-3 bg-surface-container-high rounded-full overflow-hidden relative">
+<div class="h-full bg-gradient-to-l from-secondary to-secondary-fixed rounded-full transition-all duration-700" style="width: 90%;"></div>
+</div>
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-secondary font-bold">متبقي: 3,600 ر.س لاكتمال الكفالة</span>
+<span class="font-numeral-md text-numeral-md text-primary font-bold">90%</span>
+</div>
+<!-- Quick Presets -->
+<div class="grid grid-cols-3 gap-space-xs pt-space-xs">
+<button class="py-space-xs rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/40 text-primary font-numeral-md text-numeral-md font-bold transition-colors" type="button">100 ر.س</button>
+<button class="py-space-xs rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/40 text-primary font-numeral-md text-numeral-md font-bold transition-colors" type="button">250 ر.س</button>
+<button class="py-space-xs rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/40 text-primary font-numeral-md text-numeral-md font-bold transition-colors" type="button">1,000 ر.س</button>
+</div>
+<button class="w-full h-12 mt-space-xs rounded-xl bg-tertiary-fixed text-tertiary font-title-md text-title-md hover:bg-tertiary-fixed-dim transition-all flex items-center justify-center gap-space-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+                تبرع الآن للحالة
+              </button>
+</div>
+</div>
+</article>
+<!-- Case 3: استئصال ورم جراحي -->
+<article class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group">
+<div class="relative h-56 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Modern operating theater preparation suite showing advanced neurosurgery microscope and sterile surgical environment in a hospital in Dammam, warm blue tone, medical excellence atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrHDz0KeWHnzCsgI0-WNkE3R2yYJyaOB_ulyfq0vbbIFsFwY4KlLzB5FXdNF_UOa3c9L9q277D0lsMfUuslYQHdOMjpIQErXLAKvUzu_s9K21oCx4WVXDpPCtXmSyP7QIEdnYsp07e40gVOCerZEeYUx5qP671emx_mO-TQmx12tTkCuYANzY6KCBM-9DfjaiteHOzoyjZUpdT2HkU-ocje3yYxkJDhU_vou9gjjPA"/>
+<div class="absolute top-space-sm right-space-sm flex gap-space-xs">
+<span class="px-space-sm py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-secondary font-label-sm text-label-sm flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">biotech</span>
+                جراحة أورام دقيقة
+              </span>
+</div>
+<div class="absolute top-space-sm left-space-sm">
+<span class="px-space-sm py-1 rounded-full bg-error text-on-error font-label-sm text-label-sm shadow-sm animate-pulse">
+                حالة عاجلة جداً
+              </span>
+</div>
+</div>
+<div class="p-space-lg flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm mb-space-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_on</span>
+                  مستشفى الملك فهد التخصصي - الدمام
+                </span>
+<span class="font-numeral-md text-numeral-md text-outline">#ATH-5502</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-space-xs">استئصال ورم حميد ضاغط على النخاع الشوكي</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mb-space-md">
+                تدهور حركي سريع يستوجب تدخلاً ميكروسكوبياً لإزالة الورم وتفادي الشلل التام، الحالة خضعت للتدقيق الطبي السريري.
+              </p>
+</div>
+<!-- Financial Bar & Donation Module -->
+<div class="space-y-space-sm pt-space-xs bg-surface-container-low/50 p-space-sm rounded-xl">
+<div class="flex justify-between items-baseline font-body-sm text-body-sm">
+<div>
+<span class="text-on-surface-variant">تم جمع: </span>
+<span class="font-numeral-md text-numeral-md text-primary font-bold">45,000</span>
+<span class="text-on-surface-variant">ر.س</span>
+</div>
+<div>
+<span class="text-on-surface-variant">الهدف: </span>
+<span class="font-numeral-md text-numeral-md text-on-surface font-semibold">120,000</span>
+<span class="text-on-surface-variant">ر.س</span>
+</div>
+</div>
+<!-- Progress bar: 37.5% -->
+<div class="w-full h-3 bg-surface-container-high rounded-full overflow-hidden relative">
+<div class="h-full bg-gradient-to-l from-error to-tertiary-fixed rounded-full transition-all duration-700" style="width: 37.5%;"></div>
+</div>
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-error font-bold">متبقي: 75,000 ر.س</span>
+<span class="font-numeral-md text-numeral-md text-primary font-bold">37.5%</span>
+</div>
+<!-- Quick Presets -->
+<div class="grid grid-cols-3 gap-space-xs pt-space-xs">
+<button class="py-space-xs rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/40 text-primary font-numeral-md text-numeral-md font-bold transition-colors" type="button">100 ر.س</button>
+<button class="py-space-xs rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/40 text-primary font-numeral-md text-numeral-md font-bold transition-colors" type="button">500 ر.س</button>
+<button class="py-space-xs rounded-lg bg-surface-container-lowest hover:bg-secondary-fixed/40 text-primary font-numeral-md text-numeral-md font-bold transition-colors" type="button">1,500 ر.س</button>
+</div>
+<button class="w-full h-12 mt-space-xs rounded-xl bg-tertiary-fixed text-tertiary font-title-md text-title-md hover:bg-tertiary-fixed-dim transition-all flex items-center justify-center gap-space-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+                تبرع الآن للحالة
+              </button>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>
+<!-- How It Works Section: 4-Step Clinical Integrity Flow -->
+<section class="w-full bg-surface-container-low py-space-xl">
+<div class="w-full max-w-[1280px] mx-auto px-margin">
+<div class="text-center max-w-3xl mx-auto mb-space-xl">
+<span class="font-label-md text-label-md text-secondary font-semibold uppercase tracking-wider">نموذج الحوكمة المبتكر</span>
+<h2 class="font-headline-lg text-headline-lg text-primary mt-space-xs">كيف تصنع تبرعاتكم الشفاء في أثر؟</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-space-xs">
+          دورة حياة دقيقة تبدأ من الملف السريري للمريض وتنتهي بإذن الله بتقرير الشفاء، مع انعدام الوسطاء الماليين تماماً.
+        </p>
+</div>
+<!-- Step Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md relative">
+<!-- Step 1 -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm relative flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<span class="w-10 h-10 rounded-full bg-primary-fixed text-primary font-numeral-lg text-numeral-lg font-bold flex items-center justify-center">01</span>
+<span class="material-symbols-outlined text-secondary text-[28px]">upload_file</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-space-xs">تقديم الطلب والتقارير</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              يقوم المريض أو وليه برفع التقارير الطبية، الهوية، والتقرير الاجتماعي عبر بوابة المستفيد المشفرة.
+            </p>
+</div>
+<div class="mt-space-md pt-space-xs border-t-0 flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>تحقق آلي عبر نفاذ</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm relative flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<span class="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-numeral-lg text-numeral-lg font-bold flex items-center justify-center">02</span>
+<span class="material-symbols-outlined text-secondary text-[28px]">biotech</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-space-xs">التدقيق الطبي والاجتماعي</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              لجنة طبية استشارية مستقلة تراجع أهلية الحالة وخطة العلاج، بالتوازي مع بحث الحالة المالية للأسرة.
+            </p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">health_and_safety</span>
+<span>اعتماد استشاري معتمد</span>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm relative flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<span class="w-10 h-10 rounded-full bg-tertiary-fixed text-tertiary font-numeral-lg text-numeral-lg font-bold flex items-center justify-center">03</span>
+<span class="material-symbols-outlined text-secondary text-[28px]">campaign</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-space-xs">إطلاق الحملة الموثقة</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              نشر الحالة على المنصة برقم ترخيص رسمي، مع كشف دقيق للتكلفة الفعلية المقدرة من المستشفى.
+            </p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>شفافية التكاليف 100%</span>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm relative flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<span class="w-10 h-10 rounded-full bg-primary-container text-on-primary font-numeral-lg text-numeral-lg font-bold flex items-center justify-center">04</span>
+<span class="material-symbols-outlined text-secondary-fixed text-[28px]">task_alt</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-space-xs">السداد المباشر والشفاء</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              تحويل المبالغ مباشرة لحساب المستشفى المنفذ لإجراء العملية، وتزويد المتبرعين بتقرير الشفاء النهائي.
+            </p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+<span>سند إلكتروني + تقرير أثر</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Medical Partners & Charity Associations Carousel -->
+<section class="w-full py-space-xl">
+<div class="w-full max-w-[1280px] mx-auto px-margin">
+<div class="text-center mb-space-lg">
+<span class="font-label-md text-label-md text-secondary font-semibold">شراكات استراتيجية موثقة</span>
+<h2 class="font-headline-lg text-headline-lg text-primary mt-space-xs">المستشفيات والجهات الصحية المعتمدة</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">نعمل جنباً إلى جنب مع كبرى الصروح الطبية لتقديم الرعاية بأعلى المعايير العالمية</p>
+</div>
+<!-- Partner Badges Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-space-md items-center">
+<!-- Partner 1 -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
+<div class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center text-primary mb-space-xs">
+<span class="material-symbols-outlined text-[32px]">apartment</span>
+</div>
+<p class="font-title-md text-title-md text-primary font-bold">مدينة الملك فهد</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant">الطبية - الرياض</span>
+</div>
+<!-- Partner 2 -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
+<div class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center text-secondary mb-space-xs">
+<span class="material-symbols-outlined text-[32px]">local_hospital</span>
+</div>
+<p class="font-title-md text-title-md text-primary font-bold">التخصصي</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant">مركز الأبحاث</span>
+</div>
+<!-- Partner 3 -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
+<div class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center text-tertiary mb-space-xs">
+<span class="material-symbols-outlined text-[32px]">health_and_safety</span>
+</div>
+<p class="font-title-md text-title-md text-primary font-bold">مدينة الملك سعود</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant">الطبية (الشميسي)</span>
+</div>
+<!-- Partner 4 -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
+<div class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center text-secondary mb-space-xs">
+<span class="material-symbols-outlined text-[32px]">medication</span>
+</div>
+<p class="font-title-md text-title-md text-primary font-bold">مستشفى الحرس</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant">الشؤون الصحية</span>
+</div>
+<!-- Partner 5 -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
+<div class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center text-primary mb-space-xs">
+<span class="material-symbols-outlined text-[32px]">healing</span>
+</div>
+<p class="font-title-md text-title-md text-primary font-bold">جمعية رعاية</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant">أمراض الكلى</span>
+</div>
+<!-- Partner 6 -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
+<div class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center text-secondary mb-space-xs">
+<span class="material-symbols-outlined text-[32px]">favorite_border</span>
+</div>
+<p class="font-title-md text-title-md text-primary font-bold">جمعية قلبي</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant">جراحة القلب للأطفال</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Transparency, Sharia Governance & Zero-Cash Model -->
+<section class="w-full bg-primary text-on-primary py-space-xl relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-l from-primary-container/40 via-transparent to-transparent pointer-events-none"></div>
+<div class="w-full max-w-[1280px] mx-auto px-margin relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+<!-- Text & Core Pillars -->
+<div class="lg:col-span-7 space-y-space-md text-right">
+<span class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-primary-container text-secondary-fixed font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+            حوكمة مالية وشرعية صارمة
+          </span>
+<h2 class="font-headline-lg text-headline-lg text-on-primary">
+            نظام القسائم الطبية المباشرة: <br/>
+<span class="text-tertiary-fixed">لا تسليم نقدي لأي مستفيد</span>
+</h2>
+<p class="font-body-lg text-body-lg text-primary-fixed">
+            التزاماً بأعلى معايير النزاهة وأحكام الشريعة الإسلامية في صرف أموال الزكاة والصدقات، صممت منصة "أثر" نظام الصرف المغلق؛ حيث تُحول التبرعات بموجب أوامر صرف مصرفية إلكترونية حصراً إلى حساب المنشأة الطبية المرخصة المشرفة على الإجراء.
+          </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md pt-space-xs">
+<div class="bg-primary-container/60 p-space-md rounded-xl backdrop-blur-sm">
+<div class="flex items-center gap-space-xs text-secondary-fixed mb-1">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+<span class="font-title-md text-title-md">صفر استقطاع إداري</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary-fixed">
+                تصل تبرعاتكم بنسبة 100% لفاتورة العلاج وتكاليف الأدوية والأجهزة التعويضية دون أي عمولات تشغيلية.
+              </p>
+</div>
+<div class="bg-primary-container/60 p-space-md rounded-xl backdrop-blur-sm">
+<div class="flex items-center gap-space-xs text-tertiary-fixed mb-1">
+<span class="material-symbols-outlined text-[20px]">auto_stories</span>
+<span class="font-title-md text-title-md">فتوى شرعية معتمدة</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary-fixed">
+                مجازة من هيئة الرقابة الشرعية لمصارف الزكاة، كفالة العلاج، وتفريج كربات العاجزين والفقراء.
+              </p>
+</div>
+</div>
+</div>
+<!-- Interactive Cost Breakdown Ledger Graphic -->
+<div class="lg:col-span-5">
+<div class="bg-surface-container-lowest text-on-surface rounded-2xl p-space-lg shadow-2xl">
+<div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-surface-container">
+<div>
+<span class="font-label-sm text-label-sm text-secondary font-bold">نموذج الشفافية الحية</span>
+<h4 class="font-title-md text-title-md text-primary">توزيع ريال التبرع في أثر</h4>
+</div>
+<span class="material-symbols-outlined text-secondary text-[28px]">donut_large</span>
+</div>
+<!-- Ledger Breakdown Items -->
+<div class="space-y-space-sm font-body-md text-body-md">
+<div class="flex items-center justify-between p-space-xs rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-space-xs">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span>العمليات الجراحية وغرف العمليات</span>
+</div>
+<span class="font-numeral-md text-numeral-md font-bold text-primary">60%</span>
+</div>
+<div class="flex items-center justify-between p-space-xs rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-space-xs">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span>الأجهزة التعويضية والمستلزمات</span>
+</div>
+<span class="font-numeral-md text-numeral-md font-bold text-primary">25%</span>
+</div>
+<div class="flex items-center justify-between p-space-xs rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-space-xs">
+<div class="w-3 h-3 rounded-full bg-tertiary-fixed-dim"></div>
+<span>الأدوية والتأهيل بعد الجراحة</span>
+</div>
+<span class="font-numeral-md text-numeral-md font-bold text-primary">15%</span>
+</div>
+<div class="flex items-center justify-between p-space-xs rounded-lg bg-secondary-fixed/30 font-bold text-secondary">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>رسوم إدارية مقتطعة من التبرع</span>
+</div>
+<span class="font-numeral-md text-numeral-md">0.0%</span>
+</div>
+</div>
+<!-- Download Audit Report CTA -->
+<a class="mt-space-md w-full py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-container text-primary font-title-md text-title-md flex items-center justify-center gap-space-xs transition-colors" data-path="transparency-reports" href="#">
+<span class="material-symbols-outlined text-[20px]">download</span>
+              تحميل تقرير الحوكمة والتدقيق المالي 2024
+            </a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sticky Mobile / Bottom Quick Donation Bar Trigger -->
+<div class="w-full bg-surface-container-lowest shadow-lg py-space-md sticky bottom-0 z-40">
+<div class="w-full max-w-[1280px] mx-auto px-margin flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="flex h-3 w-3 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
+</span>
+<span class="font-body-md text-body-md text-primary font-semibold">
+          14 حالة حرجة تحتاج اكتمال تغطيتها قبل نهاية اليوم
+        </span>
+</div>
+<div class="flex items-center gap-space-md w-full sm:w-auto">
+<a class="flex-1 sm:flex-none px-space-lg py-space-xs rounded-xl bg-tertiary-fixed text-tertiary font-title-md text-title-md hover:bg-tertiary-fixed-dim shadow-sm flex items-center justify-center gap-space-xs transition-all" data-path="medical-cases" href="#">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+          تبرع سريع
+        </a>
+<a class="px-space-md py-space-xs rounded-xl bg-surface-container-low text-on-surface font-title-md text-title-md hover:bg-surface-container-high transition-colors" data-path="how-it-works" href="#">
+          معرفة المزيد
+        </a>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-low text-on-surface py-space-xl"><div class="w-full max-w-[1280px] mx-auto px-margin"><div class="grid grid-cols-1 md:grid-cols-4 gap-space-lg mb-space-lg"><div class="space-y-space-sm"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-primary">منصة أثر الخيرية</span></div><p class="font-body-md text-body-md text-on-surface-variant">منصة سعودية موثوقة للتمويل الجماعي الطبي وإعانة المرضى غير القادرين، تحت إشراف الجهات الخيرية المعتمدة.</p><div class="inline-flex items-center gap-space-xs px-space-sm py-space-xs rounded-full bg-surface-container-lowest text-secondary font-label-sm text-label-sm"><span class="material-symbols-outlined text-[16px]">verified_user</span>متوافق مع الضوابط الشرعية المعتمدة</div></div><div><h4 class="font-title-md text-title-md text-primary mb-space-sm">بوابات المستفيدين</h4><ul class="space-y-space-xs font-body-md text-body-md text-on-surface-variant"><li><a class="hover:text-primary transition-colors" data-path="patient-portal" href="#">بوابة المريض</a></li><li><a class="hover:text-primary transition-colors" data-path="donor-portal" href="#">لوحة المتبرع وشهادات الأثر</a></li><li><a class="hover:text-primary transition-colors" data-path="hospital-portal" href="#">بوابة المستشفيات والكوادر</a></li><li><a class="hover:text-primary transition-colors" data-path="charity-portal" href="#">بوابة الجمعيات الشريكة</a></li></ul></div><div><h4 class="font-title-md text-title-md text-primary mb-space-sm">الشفافية والحوكمة</h4><ul class="space-y-space-xs font-body-md text-body-md text-on-surface-variant"><li><a class="hover:text-primary transition-colors" data-path="transparency-reports" href="#">التقارير المالية والتدقيق</a></li><li><a class="hover:text-primary transition-colors" data-path="how-it-works" href="#">آلية التحقق من الحالات</a></li><li><a class="hover:text-primary transition-colors" data-path="terms-privacy" href="#">الشروط والأحكام والخصوصية</a></li><li><a class="hover:text-primary transition-colors" data-path="contact-support" href="#">الدعم والمساعدة الطارئة</a></li></ul></div><div class="space-y-space-sm"><h4 class="font-title-md text-title-md text-primary mb-space-sm">طرق الدفع والتبرع الآمن</h4><p class="font-body-sm text-body-sm text-on-surface-variant">نوفر وسائل دفع إلكترونية معتمدة عبر البنوك السعودية لضمان وصول 100% من مبلغ التبرع للحالة دون اقتطاع.</p><div class="flex flex-wrap gap-space-xs font-numeral-md text-numeral-md text-outline"><span class="px-space-sm py-space-xs rounded-lg bg-surface-container-lowest">Mada</span><span class="px-space-sm py-space-xs rounded-lg bg-surface-container-lowest">Apple Pay</span><span class="px-space-sm py-space-xs rounded-lg bg-surface-container-lowest">Visa</span><span class="px-space-sm py-space-xs rounded-lg bg-surface-container-lowest">STC Pay</span></div></div></div><div class="pt-space-md flex flex-col md:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-on-surface-variant"><p>جميع الحقوق محفوظة لمنصة أثر الطبية © 2025 - مرخصة نظامياً</p><div class="flex items-center gap-space-md"><a class="hover:text-primary transition-colors" data-path="terms-privacy" href="#">سياسة الخصوصية</a><a class="hover:text-primary transition-colors" data-path="terms-privacy" href="#">حوكمة التبرعات</a></div></div></div></footer></body></html>
