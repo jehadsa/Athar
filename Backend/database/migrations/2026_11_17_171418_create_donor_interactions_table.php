@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('donor_id')->constrained()->onDelete('cascade');
             $table->foreignId('case_category_id')->constrained()->onDelete('cascade');
             $table->string('interaction_type');
-            $table->timestamp('created_at')->useCurrent();
             $table->timestamps();
         });
     }
