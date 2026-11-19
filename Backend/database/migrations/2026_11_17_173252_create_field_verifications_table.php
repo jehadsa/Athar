@@ -13,8 +13,8 @@ return new class extends Migration
     {
        Schema::create('field_verifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('case_id')->constrained('medical_cases');
-            $table->foreignId('case_category_id')->constrained('case_categories');
+            $table->foreignId('case_category_id')->constrained('medical_cases');
+            $table->foreignId('charity_id')->constrained('case_categories');
             $table->integer('social_score');
             $table->integer('financial_status_score');
             $table->string('decision', 20);

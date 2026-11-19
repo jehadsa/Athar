@@ -14,7 +14,6 @@ return new class extends Migration
             $table->id();
             $table->string('name', 200);
             $table->string('type', 30);
-            $table->string('specialty', 150)->nullable();
             $table->string('license_number', 100)->unique()->nullable();
             $table->string('city', 100);
             $table->string('address', 255);

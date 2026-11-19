@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('experts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->unique();
             $table->string('expert_type');
             $table->string('specialty')->nullable();
             $table->string('license_number')->nullable();
