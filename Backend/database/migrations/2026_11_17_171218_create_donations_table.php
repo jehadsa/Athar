@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('donor_id')->constrained('donors')->onDelete('cascade');
-            $table->foreignId('case_category_id')->constrained('case_categories')->onDelete('cascade');
+            $table->foreignId('medical_case_id')->constrained('medical_cases')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
             $table->string('currency')->default('USD');
             $table->string('payment_method');

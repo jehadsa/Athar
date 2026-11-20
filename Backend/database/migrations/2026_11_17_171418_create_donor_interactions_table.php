@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('donor_interactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('donor_id')->constrained()->onDelete('cascade');
-            $table->foreignId('case_category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('medical_case_id')->constrained()->onDelete('cascade');
             $table->string('interaction_type');
             $table->timestamps();
         });

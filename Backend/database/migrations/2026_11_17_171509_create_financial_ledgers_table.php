@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('financial_ledgers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('case_category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('donation_id')->constrained()->onDelete('cascade');
+            $table->foreignId('medical_case_id')->constrained()->onDelete('cascade');
             $table->enum('entry_type', ['credit', 'debit']);
             $table->decimal('amount', 10, 2);
             $table->decimal('balance_after', 10, 2);
