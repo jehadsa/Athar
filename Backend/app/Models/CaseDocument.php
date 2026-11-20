@@ -8,7 +8,7 @@ class CaseDocument extends Model
 {
     //
      protected $fillable = [
-        'case_category_id',
+        'medical_case_id',
         'doc_type',
         'file_path',
         'original_name',
@@ -22,9 +22,4 @@ class CaseDocument extends Model
         'is_confidential' => 'boolean',
     ];
 
-    public function medicalCase(): BelongsTo
-    {
-        return $this->belongsTo(MedicalCase::class, 'case_id');
-    }
 }
-
