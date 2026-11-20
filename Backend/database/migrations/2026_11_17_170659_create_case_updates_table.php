@@ -14,7 +14,7 @@ return new class extends Migration
        Schema::create('case_updates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('case_id')->constrained('medical_cases')->cascadeOnDelete();
-            $table->foreignId('case_category_id')->constrained('case_categories')->cascadeOnDelete();
+            $table->foreignId('medical_case_id')->constrained('medical_cases')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('update_type', 30);
             $table->string('title', 255);

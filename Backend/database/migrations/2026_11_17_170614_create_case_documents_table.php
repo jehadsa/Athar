@@ -13,8 +13,7 @@ return new class extends Migration
     {
        Schema::create('case_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('case_id')->constrained('medical_cases')->cascadeOnDelete();
-            $table->foreignId('case_category_id')->constrained('case_categories')->cascadeOnDelete();
+            $table->foreignId('medical_case_id')->constrained('medical_cases')->cascadeOnDelete();
             $table->string('doc_type', 30);
             $table->string('file_path', 500);
             $table->string('original_name', 255);
