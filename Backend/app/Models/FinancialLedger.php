@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FinancialLedger extends Model
 {
     protected $fillable = [
-        'case_category_id',
+        'medical_case_id',
         'donation_id',
         'entry_type',
         'amount',

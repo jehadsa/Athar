@@ -9,7 +9,7 @@ class CaseReview extends Model
     //
     protected $fillable = [
         'case_id',
-        'case_category_id',
+        'medical_case_id',
         'user_id',
         'review_type',
         'decision',
@@ -25,12 +25,5 @@ class CaseReview extends Model
         'reviewed_at' => 'datetime',
     ];
 
-    public function medicalCase(): BelongsTo
-    {
-        return $this->belongsTo(MedicalCase::class, 'case_id');
-    }
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+   
 }

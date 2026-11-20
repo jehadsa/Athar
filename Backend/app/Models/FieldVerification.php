@@ -8,7 +8,7 @@ class FieldVerification extends Model
 {
     //
     protected $fillable = [
-        'case_category_id',
+        'medical_case_id',
         'charity_id',
         'social_score',
         'financial_status_score',

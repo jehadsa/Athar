@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo; 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CasePriorityScore extends Model
 {
     //
     protected $fillable = [
-        'case_id',
+        'medical_case_id',
         'severity_score',
         'urgency_score',
         'social_score',
@@ -23,10 +23,5 @@ class CasePriorityScore extends Model
         'calculated_at' => 'datetime',
     ];
 
-
-    public function medicalCase(): BelongsTo
-    {
-        return $this->belongsTo(MedicalCase::class, 'case_id');
-    }
 
 }

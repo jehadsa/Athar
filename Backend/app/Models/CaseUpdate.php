@@ -8,7 +8,7 @@ class CaseUpdate extends Model
 {
     //
     protected $fillable = [
-        'case_category_id',
+        'medical_case_id',
         'user_id',
         'update_type',
         'title',
@@ -17,14 +17,5 @@ class CaseUpdate extends Model
     ];
 
 
-    public function medicalCase(): BelongsTo
-    {
-        return $this->belongsTo(MedicalCase::class, 'case_id');
-    }
-
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+    
 }
