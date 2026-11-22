@@ -1,3 +1,4 @@
+import {motion} from 'motion/react';
 import {useState} from 'react';
 import {CHARITY_PARTNERS, RegionKey} from '../data/atharData';
 import {AppIcon} from './AppIcon';
@@ -15,9 +16,15 @@ export function PartnersSection({onFilterByRegion}: PartnersSectionProps) {
       : CHARITY_PARTNERS.filter((c) => c.id === selectedCharityId);
 
   return (
-    <section id="partners-section" className="w-full py-space-xl bg-surface">
+    <section id="partners-section" className="w-full py-space-xl bg-surface overflow-hidden">
       <div className="w-full max-w-[1280px] mx-auto px-margin-sm md:px-margin">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-space-lg gap-space-md">
+        <motion.div
+          initial={{opacity: 0, y: 16}}
+          whileInView={{opacity: 1, y: 0}}
+          viewport={{once: true, amount: 0.15}}
+          transition={{duration: 0.75, ease: [0.16, 1, 0.3, 1]}}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-space-lg gap-space-md"
+        >
           <div>
             <span className="inline-flex items-center gap-1.5 font-label-md text-label-md text-secondary font-bold">
               <AppIcon name="handshake" size={16} />
@@ -54,13 +61,22 @@ export function PartnersSection({onFilterByRegion}: PartnersSectionProps) {
               ))}
             </select>
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
-          {visibleCharities.map((charity) => (
-            <article
+          {visibleCharities.map((charity, index) => (
+            <motion.article
               key={charity.id}
-              className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm hover:shadow-lg border border-surface-container transition-all flex flex-col justify-between gap-space-md"
+              initial={{opacity: 0, y: 22, scale: 0.985}}
+              whileInView={{opacity: 1, y: 0, scale: 1}}
+              viewport={{once: true, amount: 0.08}}
+              transition={{
+                duration: 0.8,
+                delay: (index % 3) * 0.09,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              whileHover={{y: -4, transition: {duration: 0.3, ease: [0.16, 1, 0.3, 1]}}}
+              className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm hover:shadow-lg border border-surface-container transition-shadow flex flex-col justify-between gap-space-md"
             >
               <div className="space-y-space-md">
                 {/* Charity Header */}
@@ -130,7 +146,7 @@ export function PartnersSection({onFilterByRegion}: PartnersSectionProps) {
                 <span>استعراض حالات {charity.governorate}</span>
                 <AppIcon name="arrow_right_alt" size={16} className="rotate-180" />
               </button>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>

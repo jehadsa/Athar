@@ -1,3 +1,4 @@
+import {motion} from 'motion/react';
 import {AppIcon} from './AppIcon';
 
 interface GovernanceSectionProps {
@@ -5,6 +6,41 @@ interface GovernanceSectionProps {
 }
 
 export function GovernanceSection({onOpenReportModal}: GovernanceSectionProps) {
+  const breakdownItems = [
+    {
+      label: 'العمليات الجراحية وغرف العمليات',
+      percent: 60,
+      percentLabel: '60%',
+      dotClass: 'bg-primary',
+      barClass: 'bg-primary',
+      isZero: false,
+    },
+    {
+      label: 'الأجهزة التعويضية والمستلزمات',
+      percent: 25,
+      percentLabel: '25%',
+      dotClass: 'bg-secondary',
+      barClass: 'bg-secondary',
+      isZero: false,
+    },
+    {
+      label: 'الأدوية والتأهيل بعد الجراحة',
+      percent: 15,
+      percentLabel: '15%',
+      dotClass: 'bg-tertiary-fixed-dim',
+      barClass: 'bg-tertiary-fixed-dim',
+      isZero: false,
+    },
+    {
+      label: 'رسوم إدارية مقتطعة من التبرع',
+      percent: 0,
+      percentLabel: '0.0%',
+      dotClass: 'bg-secondary',
+      barClass: 'bg-secondary',
+      isZero: true,
+    },
+  ];
+
   return (
     <section
       id="governance-section"
@@ -14,7 +50,13 @@ export function GovernanceSection({onOpenReportModal}: GovernanceSectionProps) {
       <div className="w-full max-w-[1280px] mx-auto px-margin-sm md:px-margin relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
           {/* Text & Core Pillars */}
-          <div className="lg:col-span-7 space-y-space-md text-start">
+          <motion.div
+            initial={{opacity: 0, x: 20}}
+            whileInView={{opacity: 1, x: 0}}
+            viewport={{once: true, amount: 0.12}}
+            transition={{duration: 0.85, ease: [0.16, 1, 0.3, 1]}}
+            className="lg:col-span-7 space-y-space-md text-start"
+          >
             <span className="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-primary-container text-secondary-fixed font-label-md text-label-md">
               <AppIcon name="gavel" size={16} />
               <span>حوكمة مالية وشرعية صارمة</span>
@@ -30,7 +72,13 @@ export function GovernanceSection({onOpenReportModal}: GovernanceSectionProps) {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md pt-space-xs">
-              <div className="bg-primary-container/60 p-space-md rounded-xl backdrop-blur-sm">
+              <motion.div
+                initial={{opacity: 0, y: 14}}
+                whileInView={{opacity: 1, y: 0}}
+                viewport={{once: true, amount: 0.15}}
+                transition={{duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1]}}
+                className="bg-primary-container/60 p-space-md rounded-xl backdrop-blur-sm"
+              >
                 <div className="flex items-center gap-space-xs text-secondary-fixed mb-1">
                   <AppIcon name="account_balance" size={18} />
                   <span className="font-title-md text-title-md">صفر استقطاع إداري</span>
@@ -39,8 +87,14 @@ export function GovernanceSection({onOpenReportModal}: GovernanceSectionProps) {
                   تصل تبرعاتكم بنسبة 100% لفاتورة العلاج وتكاليف الأدوية والأجهزة التعويضية دون أي
                   عمولات تشغيلية.
                 </p>
-              </div>
-              <div className="bg-primary-container/60 p-space-md rounded-xl backdrop-blur-sm">
+              </motion.div>
+              <motion.div
+                initial={{opacity: 0, y: 14}}
+                whileInView={{opacity: 1, y: 0}}
+                viewport={{once: true, amount: 0.15}}
+                transition={{duration: 0.7, delay: 0.18, ease: [0.16, 1, 0.3, 1]}}
+                className="bg-primary-container/60 p-space-md rounded-xl backdrop-blur-sm"
+              >
                 <div className="flex items-center gap-space-xs text-tertiary-fixed mb-1">
                   <AppIcon name="auto_stories" size={18} />
                   <span className="font-title-md text-title-md">فتوى شرعية معتمدة</span>
@@ -49,12 +103,18 @@ export function GovernanceSection({onOpenReportModal}: GovernanceSectionProps) {
                   مجازة من هيئة الرقابة الشرعية لمصارف الزكاة، كفالة العلاج، وتفريج كربات العاجزين
                   والفقراء.
                 </p>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Cost Breakdown Ledger Graphic */}
-          <div className="lg:col-span-5">
+          <motion.div
+            initial={{opacity: 0, x: -20, scale: 0.98}}
+            whileInView={{opacity: 1, x: 0, scale: 1}}
+            viewport={{once: true, amount: 0.12}}
+            transition={{duration: 0.85, delay: 0.08, ease: [0.16, 1, 0.3, 1]}}
+            className="lg:col-span-5"
+          >
             <div className="bg-surface-container-lowest text-on-surface rounded-2xl p-space-lg shadow-2xl">
               <div className="flex items-center justify-between pb-space-sm mb-space-sm border-b border-surface-container">
                 <div>
@@ -69,34 +129,57 @@ export function GovernanceSection({onOpenReportModal}: GovernanceSectionProps) {
               </div>
 
               <div className="space-y-space-sm font-body-md text-body-md">
-                <div className="flex items-center justify-between p-space-xs rounded-lg bg-surface-container-low">
-                  <div className="flex items-center gap-space-xs">
-                    <div className="w-3 h-3 rounded-full bg-primary shrink-0" />
-                    <span>العمليات الجراحية وغرف العمليات</span>
-                  </div>
-                  <span className="font-numeral-md text-numeral-md font-bold text-primary">60%</span>
-                </div>
-                <div className="flex items-center justify-between p-space-xs rounded-lg bg-surface-container-low">
-                  <div className="flex items-center gap-space-xs">
-                    <div className="w-3 h-3 rounded-full bg-secondary shrink-0" />
-                    <span>الأجهزة التعويضية والمستلزمات</span>
-                  </div>
-                  <span className="font-numeral-md text-numeral-md font-bold text-primary">25%</span>
-                </div>
-                <div className="flex items-center justify-between p-space-xs rounded-lg bg-surface-container-low">
-                  <div className="flex items-center gap-space-xs">
-                    <div className="w-3 h-3 rounded-full bg-tertiary-fixed-dim shrink-0" />
-                    <span>الأدوية والتأهيل بعد الجراحة</span>
-                  </div>
-                  <span className="font-numeral-md text-numeral-md font-bold text-primary">15%</span>
-                </div>
-                <div className="flex items-center justify-between p-space-xs rounded-lg bg-secondary-fixed/30 font-bold text-secondary">
-                  <div className="flex items-center gap-space-xs">
-                    <AppIcon name="verified" size={17} />
-                    <span>رسوم إدارية مقتطعة من التبرع</span>
-                  </div>
-                  <span className="font-numeral-md text-numeral-md">0.0%</span>
-                </div>
+                {breakdownItems.map((item, idx) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{opacity: 0, y: 10}}
+                    whileInView={{opacity: 1, y: 0}}
+                    viewport={{once: true, amount: 0.15}}
+                    transition={{
+                      duration: 0.65,
+                      delay: 0.15 + idx * 0.08,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className={`p-space-xs rounded-lg ${
+                      item.isZero
+                        ? 'bg-secondary-fixed/30 font-bold text-secondary flex items-center justify-between'
+                        : 'bg-surface-container-low space-y-1.5'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-space-xs">
+                        {item.isZero ? (
+                          <AppIcon name="verified" size={17} />
+                        ) : (
+                          <div className={`w-3 h-3 rounded-full ${item.dotClass} shrink-0`} />
+                        )}
+                        <span>{item.label}</span>
+                      </div>
+                      <span
+                        className={`font-numeral-md text-numeral-md ${
+                          item.isZero ? '' : 'font-bold text-primary'
+                        }`}
+                      >
+                        {item.percentLabel}
+                      </span>
+                    </div>
+                    {!item.isZero && (
+                      <div className="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+                        <motion.div
+                          initial={{width: 0}}
+                          whileInView={{width: `${item.percent}%`}}
+                          viewport={{once: true, amount: 0.2}}
+                          transition={{
+                            duration: 1.1,
+                            delay: 0.2 + idx * 0.1,
+                            ease: [0.16, 1, 0.3, 1],
+                          }}
+                          className={`h-full rounded-full ${item.barClass}`}
+                        />
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
               </div>
 
               <button
@@ -108,7 +191,7 @@ export function GovernanceSection({onOpenReportModal}: GovernanceSectionProps) {
                 <span>تحميل تقرير الحوكمة والتدقيق المالي 2024</span>
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

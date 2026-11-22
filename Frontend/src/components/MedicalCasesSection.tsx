@@ -1,3 +1,4 @@
+import {motion} from 'motion/react';
 import {useState} from 'react';
 import {MedicalCase} from '../data/atharData';
 import {AppIcon} from './AppIcon';
@@ -30,9 +31,15 @@ export function MedicalCasesSection({
   };
 
   return (
-    <section id="cases-section" className="w-full py-space-xl">
+    <section id="cases-section" className="w-full py-space-xl overflow-hidden">
       <div className="w-full max-w-[1280px] mx-auto px-margin-sm md:px-margin">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-space-lg gap-space-sm">
+        <motion.div
+          initial={{opacity: 0, y: 16}}
+          whileInView={{opacity: 1, y: 0}}
+          viewport={{once: true, amount: 0.15}}
+          transition={{duration: 0.75, ease: [0.16, 1, 0.3, 1]}}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-space-lg gap-space-sm"
+        >
           <div>
             <div className="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm mb-space-xs">
               <AppIcon name="emergency" size={15} />
@@ -67,7 +74,7 @@ export function MedicalCasesSection({
               />
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {cases.length === 0 ? (
           <div className="bg-surface-container-lowest rounded-2xl p-space-xl text-center shadow-sm">
@@ -90,16 +97,25 @@ export function MedicalCasesSection({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
-            {cases.map((item) => {
+            {cases.map((item, index) => {
               const remaining = Math.max(0, item.target - item.raised);
               const percentage = Math.min(100, Number(((item.raised / item.target) * 100).toFixed(1)));
               const isCompleted = remaining === 0;
               const selectedAmount = selectedAmounts[item.id] || item.presets[1];
 
               return (
-                <article
+                <motion.article
                   key={item.id}
-                  className="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group"
+                  initial={{opacity: 0, y: 24, scale: 0.985}}
+                  whileInView={{opacity: 1, y: 0, scale: 1}}
+                  viewport={{once: true, amount: 0.08}}
+                  transition={{
+                    duration: 0.8,
+                    delay: (index % 3) * 0.09,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  whileHover={{y: -4, transition: {duration: 0.3, ease: [0.16, 1, 0.3, 1]}}}
+                  className="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col group"
                 >
                   <div className="relative h-56 w-full overflow-hidden">
                     <ResilientImage
@@ -169,9 +185,16 @@ export function MedicalCasesSection({
                       </div>
 
                       <div className="w-full h-3 bg-surface-container-high rounded-full overflow-hidden relative">
-                        <div
-                          className={`h-full rounded-full transition-all duration-700 ${item.progressBarClass}`}
-                          style={{width: `${percentage}%`}}
+                        <motion.div
+                          initial={{width: 0}}
+                          whileInView={{width: `${percentage}%`}}
+                          viewport={{once: true, amount: 0.25}}
+                          transition={{
+                            duration: 1.15,
+                            delay: (index % 3) * 0.09 + 0.15,
+                            ease: [0.16, 1, 0.3, 1],
+                          }}
+                          className={`h-full rounded-full ${item.progressBarClass}`}
                         />
                       </div>
 
@@ -231,7 +254,7 @@ export function MedicalCasesSection({
                       </button>
                     </div>
                   </div>
-                </article>
+                </motion.article>
               );
             })}
           </div>

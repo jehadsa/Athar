@@ -1,4 +1,5 @@
-import {useMemo, useState} from 'react';
+import {AnimatePresence, motion} from 'motion/react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {AppIcon} from './components/AppIcon';
 import {
   ApplyCaseModal,
@@ -11,7 +12,7 @@ import {Header} from './components/Header';
 import {HeroSection} from './components/HeroSection';
 import {HowItWorksSection} from './components/HowItWorksSection';
 import {ImpactStats} from './components/ImpactStats';
-import {AuthenticatedUser, LoginPage} from './components/LoginPage';
+import {AuthenticatedUser, AuthRole, LoginPage} from './components/LoginPage';
 import {MedicalCasesSection} from './components/MedicalCasesSection';
 import {PartnersSection} from './components/PartnersSection';
 import {StickyDonationBar} from './components/StickyDonationBar';
@@ -56,8 +57,15 @@ const PORTAL_PREVIEW_DETAILS: Record<
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'login' | 'donor' | 'portal-preview'>('login');
+  const [currentPage, setCurrentPage] = useState<'login' | 'donor' | 'portal-preview'>('donor');
   const [currentUser, setCurrentUser] = useState<AuthenticatedUser | null>(null);
+  const [loginLockedRole, setLoginLockedRole] = useState<AuthRole | null>(null);
+  const [pendingTargetSection, setPendingTargetSection] = useState<string | null>(null);
+  const [pendingDonation, setPendingDonation] = useState<{
+    medicalCase: MedicalCase;
+    amount?: number;
+  } | null>(null);
+  const [pendingApplyCase, setPendingApplyCase] = useState<boolean>(false);
 
   const [cases, setCases] = useState<MedicalCase[]>(INITIAL_MEDICAL_CASES);
   const [totalDonations, setTotalDonations] = useState<number>(4825900000);
@@ -80,6 +88,202 @@ export default function App() {
   const [utilityModal, setUtilityModal] = useState<
     'login' | 'report' | 'privacy' | 'support' | 'portal' | null
   >(null);
+  const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
+
+  const isOverlayOpen =
+    currentPage === 'login' || donateModalOpen || applyModalOpen || utilityModal !== null;
+
+  useEffect(() => {
+    if (!isOverlayOpen) return;
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+    };
+  }, [isOverlayOpen]);
+
+  const softScrollFnRef = useRef<((y: number) => void) | null>(null);
+
+  const smoothScrollToY = useCallback((y: number) => {
+    if (softScrollFnRef.current && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      softScrollFnRef.current(y);
+    } else {
+      window.scrollTo({top: y, behavior: 'smooth'});
+    }
+  }, []);
+
+  const smoothScrollToElement = useCallback(
+    (elementId: string) => {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const headerOffset = 84;
+      const targetTop = Math.max(
+        0,
+        el.getBoundingClientRect().top + window.scrollY - headerOffset,
+      );
+      smoothScrollToY(targetTop);
+    },
+    [smoothScrollToY],
+  );
+
+  // Ultra-soft frame-rate-independent inertial scrolling for mouse wheel & navigation on main page
+  useEffect(() => {
+    if (currentPage !== 'donor' || isOverlayOpen) {
+      softScrollFnRef.current = null;
+      return;
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      softScrollFnRef.current = null;
+      return;
+    }
+
+    let currentY = window.scrollY;
+    let targetY = window.scrollY;
+    let lastAppliedY = window.scrollY;
+    let lastTime = performance.now();
+    let rafId: number | null = null;
+
+    const getMaxScroll = () =>
+      Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+
+    const isNestedScrollable = (target: EventTarget | null): boolean => {
+      let el = target instanceof HTMLElement ? target : null;
+      while (el && el !== document.documentElement && el !== document.body) {
+        if (el.tagName === 'SELECT' || el.tagName === 'TEXTAREA') return true;
+        const style = window.getComputedStyle(el);
+        const overflowY = style.overflowY;
+        if (
+          (overflowY === 'auto' || overflowY === 'scroll') &&
+          el.scrollHeight > el.clientHeight
+        ) {
+          return true;
+        }
+        el = el.parentElement;
+      }
+      return false;
+    };
+
+    const step = (now: number) => {
+      // Yield immediately if user dragged scrollbar or another scroll moved the page externally
+      if (Math.abs(window.scrollY - lastAppliedY) > 16) {
+        rafId = null;
+        return;
+      }
+
+      const dt = Math.min(0.05, Math.max(0.001, (now - lastTime) / 1000));
+      lastTime = now;
+
+      const diff = targetY - currentY;
+      if (Math.abs(diff) < 0.35) {
+        currentY = targetY;
+        window.scrollTo({top: targetY, behavior: 'instant' as ScrollBehavior});
+        lastAppliedY = window.scrollY;
+        rafId = null;
+        return;
+      }
+
+      // Soft exponential damping (~5.6/sec gives a cushioned, buttery Lenis-style glide)
+      const easeFactor = 1 - Math.exp(-5.6 * dt);
+      currentY += diff * easeFactor;
+      window.scrollTo({top: currentY, behavior: 'instant' as ScrollBehavior});
+      lastAppliedY = window.scrollY;
+      rafId = requestAnimationFrame(step);
+    };
+
+    const startLoopIfNeeded = () => {
+      if (rafId === null) {
+        currentY = window.scrollY;
+        lastAppliedY = window.scrollY;
+        lastTime = performance.now();
+        rafId = requestAnimationFrame(step);
+      }
+    };
+
+    softScrollFnRef.current = (y: number) => {
+      const clamped = Math.min(getMaxScroll(), Math.max(0, y));
+      if (rafId === null) {
+        targetY = clamped;
+        startLoopIfNeeded();
+      } else {
+        targetY = clamped;
+      }
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      if (isNestedScrollable(e.target)) return;
+
+      e.preventDefault();
+
+      let delta = e.deltaY;
+      if (e.deltaMode === 1) delta *= 18;
+      else if (e.deltaMode === 2) delta *= window.innerHeight;
+
+      // Slightly soften high-impulse mouse wheel steps
+      delta *= 0.92;
+
+      if (rafId === null) {
+        currentY = window.scrollY;
+        targetY = window.scrollY;
+        lastAppliedY = window.scrollY;
+      }
+
+      targetY = Math.min(getMaxScroll(), Math.max(0, targetY + delta));
+      startLoopIfNeeded();
+    };
+
+    window.addEventListener('wheel', onWheel, {passive: false});
+    return () => {
+      softScrollFnRef.current = null;
+      window.removeEventListener('wheel', onWheel);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
+  }, [currentPage, isOverlayOpen]);
+
+  // Track active section and scroll-to-top visibility while scrolling
+  useEffect(() => {
+    if (currentPage !== 'donor') return;
+
+    const sections: Array<{id: string; nav: string}> = [
+      {id: 'hero-section', nav: 'home'},
+      {id: 'cases-section', nav: 'medical-cases'},
+      {id: 'how-it-works-section', nav: 'how-it-works'},
+      {id: 'partners-section', nav: 'medical-partners'},
+      {id: 'governance-section', nav: 'transparency-reports'},
+      {id: 'footer-section', nav: 'about-athar'},
+    ];
+
+    let ticking = false;
+    const updateOnScroll = () => {
+      ticking = false;
+      const y = window.scrollY;
+      setShowScrollTop(y > 460);
+
+      const triggerLine = y + 180;
+      let matched = 'home';
+      for (const item of sections) {
+        const el = document.getElementById(item.id);
+        if (el && el.offsetTop <= triggerLine) {
+          matched = item.nav;
+        }
+      }
+      setActiveNav((prev) => (prev === matched ? prev : matched));
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateOnScroll);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    updateOnScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [currentPage]);
 
   const hasActiveFilter = Boolean(
     searchQuery.trim() || specialtyFilter || regionFilter || priorityFilter,
@@ -114,23 +318,63 @@ export default function App() {
   const handleLoginSuccess = (user: AuthenticatedUser) => {
     setCurrentUser(user);
     setUtilityModal(null);
+    setLoginLockedRole(null);
     if (user.role === 'donor') {
       setActivePortal('donor-portal');
-      setActiveNav('home');
+      setPendingApplyCase(false);
+      if (pendingDonation) {
+        const nextDonation = pendingDonation;
+        setPendingDonation(null);
+        setPendingTargetSection(null);
+        setActiveNav('medical-cases');
+        setCurrentPage('donor');
+        setSelectedDonateCase(nextDonation.medicalCase);
+        setSelectedDonateAmount(nextDonation.amount);
+        setDonateModalOpen(true);
+        setTimeout(() => {
+          const el = document.getElementById('cases-section');
+          if (el) {
+            el.scrollIntoView({behavior: 'smooth', block: 'start'});
+          }
+        }, 80);
+      } else if (pendingTargetSection === 'cases-section') {
+        setActiveNav('medical-cases');
+        setCurrentPage('donor');
+        setPendingTargetSection(null);
+        setTimeout(() => {
+          const el = document.getElementById('cases-section');
+          if (el) {
+            el.scrollIntoView({behavior: 'smooth', block: 'start'});
+          }
+        }, 80);
+      } else {
+        setActiveNav('home');
+        setCurrentPage('donor');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      }
+    } else if (user.role === 'patient' && pendingApplyCase) {
+      setPendingApplyCase(false);
+      setPendingTargetSection(null);
+      setPendingDonation(null);
       setCurrentPage('donor');
+      setApplyModalOpen(true);
     } else {
+      setPendingApplyCase(false);
+      setPendingTargetSection(null);
+      setPendingDonation(null);
       setCurrentPage('portal-preview');
+      window.scrollTo({top: 0, behavior: 'smooth'});
     }
-    window.scrollTo({top: 0, behavior: 'smooth'});
   };
 
   const handleBrowseAsGuest = () => {
-    setCurrentUser(null);
     setUtilityModal(null);
+    setLoginLockedRole(null);
+    setPendingTargetSection(null);
+    setPendingDonation(null);
+    setPendingApplyCase(false);
     setActivePortal('donor-portal');
-    setActiveNav('home');
     setCurrentPage('donor');
-    window.scrollTo({top: 0, behavior: 'smooth'});
   };
 
   const handleLogout = () => {
@@ -138,23 +382,23 @@ export default function App() {
     setDonateModalOpen(false);
     setApplyModalOpen(false);
     setCurrentUser(null);
+    setLoginLockedRole(null);
+    setPendingTargetSection(null);
+    setPendingDonation(null);
+    setPendingApplyCase(false);
     setCurrentPage('login');
-    window.scrollTo({top: 0, behavior: 'smooth'});
   };
 
   const handleNavigateSection = (sectionId: string, navKey: string) => {
     setActiveNav(navKey);
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
+    smoothScrollToElement(sectionId);
   };
 
   const handleSelectPortal = (portal: PortalRole) => {
     setActivePortal(portal);
     if (portal === 'donor-portal') {
       setCurrentPage('donor');
-      window.scrollTo({top: 0, behavior: 'smooth'});
+      smoothScrollToY(0);
       return;
     }
     if (portal !== 'home') {
@@ -164,10 +408,7 @@ export default function App() {
 
   const handleApplyTriageFilter = () => {
     setShowAllCases(true);
-    const el = document.getElementById('cases-section');
-    if (el) {
-      el.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
+    smoothScrollToElement('cases-section');
   };
 
   const handleResetFilters = () => {
@@ -180,10 +421,7 @@ export default function App() {
   const handleFilterByPartnerRegion = (region: RegionKey) => {
     setRegionFilter(region);
     setShowAllCases(true);
-    const el = document.getElementById('cases-section');
-    if (el) {
-      el.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
+    smoothScrollToElement('cases-section');
   };
 
   const handleOpenDonateForCase = (medicalCase: MedicalCase | null, amount?: number) => {
@@ -211,25 +449,6 @@ export default function App() {
     () => 11 + cases.filter((c) => c.raised < c.target && c.priority === 'critical').length,
     [cases],
   );
-
-  if (currentPage === 'login') {
-    return (
-      <>
-        <LoginPage
-          onLoginSuccess={handleLoginSuccess}
-          onBrowseAsGuest={handleBrowseAsGuest}
-          onOpenSupport={() => setUtilityModal('support')}
-        />
-        <UtilityModal
-          modalType={utilityModal}
-          activePortal={activePortal}
-          currentUser={currentUser}
-          onLogout={handleLogout}
-          onClose={() => setUtilityModal(null)}
-        />
-      </>
-    );
-  }
 
   if (currentPage === 'portal-preview' && currentUser && currentUser.role !== 'donor') {
     const portalMeta = PORTAL_PREVIEW_DETAILS[currentUser.role];
@@ -330,8 +549,27 @@ export default function App() {
             onRegionChange={setRegionFilter}
             onPriorityChange={setPriorityFilter}
             onApplyFilterSubmit={handleApplyTriageFilter}
-            onDonateUrgentClick={() => handleNavigateSection('cases-section', 'medical-cases')}
-            onOpenApplyModal={() => setApplyModalOpen(true)}
+            onDonateUrgentClick={() => {
+              if (!currentUser) {
+                setPendingApplyCase(false);
+                setLoginLockedRole('donor');
+                setPendingTargetSection('cases-section');
+                setCurrentPage('login');
+                return;
+              }
+              handleNavigateSection('cases-section', 'medical-cases');
+            }}
+            onOpenApplyModal={() => {
+              if (!currentUser || currentUser.role !== 'patient') {
+                setPendingApplyCase(true);
+                setPendingTargetSection(null);
+                setPendingDonation(null);
+                setLoginLockedRole('patient');
+                setCurrentPage('login');
+                return;
+              }
+              setApplyModalOpen(true);
+            }}
             lang={lang}
           />
 
@@ -346,7 +584,16 @@ export default function App() {
             onToggleShowAll={() => setShowAllCases((prev) => !prev)}
             hasActiveFilter={hasActiveFilter}
             onResetFilters={handleResetFilters}
-            onDonateToCase={(c, amount) => handleOpenDonateForCase(c, amount)}
+            onDonateToCase={(c, amount) => {
+              if (!currentUser) {
+                setPendingApplyCase(false);
+                setPendingDonation({medicalCase: c, amount});
+                setLoginLockedRole('donor');
+                setCurrentPage('login');
+                return;
+              }
+              handleOpenDonateForCase(c, amount);
+            }}
           />
 
           <HowItWorksSection />
@@ -363,6 +610,26 @@ export default function App() {
         onNavigateHowItWorks={() => handleNavigateSection('how-it-works-section', 'how-it-works')}
         onOpenInfoModal={(topic) => setUtilityModal(topic)}
       />
+
+      <AnimatePresence>
+        {showScrollTop && !isOverlayOpen && (
+          <motion.button
+            type="button"
+            initial={{opacity: 0, y: 14, scale: 0.9}}
+            animate={{opacity: 1, y: 0, scale: 1}}
+            exit={{opacity: 0, y: 14, scale: 0.9}}
+            transition={{duration: 0.35, ease: [0.16, 1, 0.3, 1]}}
+            whileHover={{scale: 1.06, y: -2}}
+            whileTap={{scale: 0.95}}
+            onClick={() => smoothScrollToY(0)}
+            aria-label="العودة إلى الأعلى"
+            title="العودة إلى الأعلى"
+            className="fixed bottom-24 left-5 z-40 w-11 h-11 rounded-full bg-primary text-on-primary shadow-lg shadow-primary/25 hover:bg-primary-container flex items-center justify-center cursor-pointer border border-white/15"
+          >
+            <AppIcon name="arrow_upward" size={20} />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <StickyDonationBar
         urgentCount={urgentCount}
@@ -383,6 +650,17 @@ export default function App() {
         isOpen={applyModalOpen}
         onClose={() => setApplyModalOpen(false)}
       />
+
+      <AnimatePresence>
+        {currentPage === 'login' && (
+          <LoginPage
+            onLoginSuccess={handleLoginSuccess}
+            onBrowseAsGuest={handleBrowseAsGuest}
+            onOpenSupport={() => setUtilityModal('support')}
+            lockedRole={loginLockedRole}
+          />
+        )}
+      </AnimatePresence>
 
       <UtilityModal
         modalType={utilityModal}
