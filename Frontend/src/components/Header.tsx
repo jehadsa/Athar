@@ -1,3 +1,4 @@
+import {motion, useScroll, useSpring} from 'motion/react';
 import {useState} from 'react';
 import {ATHAR_LOGO_URL, PortalRole} from '../data/atharData';
 import {AppIcon} from './AppIcon';
@@ -10,7 +11,7 @@ interface HeaderProps {
   onNavigateSection: (sectionId: string, navKey: string) => void;
   searchQuery: string;
   onSearchChange: (q: string) => void;
-  onOpenDonateModal: () => void;
+  onOpenDonateModal?: () => void;
   onOpenApplyModal?: () => void;
   onOpenLoginModal: () => void;
   currentUser?: AuthenticatedUser | null;
@@ -23,7 +24,6 @@ export function Header({
   onNavigateSection,
   searchQuery,
   onSearchChange,
-  onOpenDonateModal,
   onOpenLoginModal,
   currentUser,
   lang,
@@ -31,6 +31,13 @@ export function Header({
 }: HeaderProps) {
   const [logoError, setLogoError] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const {scrollYProgress} = useScroll();
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 24,
+    mass: 0.7,
+    restDelta: 0.001,
+  });
 
   const navItems = [
     {key: 'home', label: lang === 'ar' ? 'الرئيسية' : 'Home', target: 'hero-section'},
@@ -42,7 +49,16 @@ export function Header({
   ];
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+    <header className="fixed top-0 w-full z-50 bg-surface-container-lowest/92 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+      {/* Scroll Progress Indicator */}
+      <motion.div
+        aria-hidden="true"
+        style={{
+          scaleX: smoothProgress,
+          transformOrigin: lang === 'ar' ? '100% 50%' : '0% 50%',
+        }}
+        className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-l from-secondary via-secondary-fixed-dim to-tertiary-fixed-dim pointer-events-none"
+      />
       {/* Main Navigation Bar */}
       <div className="h-20 w-full max-w-[1280px] mx-auto px-margin-sm md:px-margin flex items-center justify-between gap-space-sm">
         <div className="flex items-center gap-space-md min-w-0">
@@ -124,14 +140,6 @@ export function Header({
               </button>
             )}
           </div>
-
-          <button
-            type="button"
-            onClick={onOpenDonateModal}
-            className="px-space-sm sm:px-space-md py-space-xs rounded-xl bg-tertiary-fixed text-tertiary font-label-md text-label-md hover:bg-tertiary-fixed-dim hover:text-on-tertiary-fixed-variant transition-all flex items-center gap-space-xs cursor-pointer whitespace-nowrap shrink-0"
-          >
-            {lang === 'ar' ? 'تبرع الآن' : 'Donate Now'}
-          </button>
 
           <button
             type="button"

@@ -1,3 +1,4 @@
+import {motion} from 'motion/react';
 import {FormEvent, useState} from 'react';
 import {ATHAR_LOGO_URL, SYRIAN_GOVERNORATES} from '../data/atharData';
 import {AppIcon} from './AppIcon';
@@ -17,6 +18,7 @@ interface LoginPageProps {
   onLoginSuccess: (user: AuthenticatedUser) => void;
   onBrowseAsGuest: () => void;
   onOpenSupport: () => void;
+  lockedRole?: AuthRole | null;
 }
 
 const ROLE_CONFIG: Record<
@@ -72,8 +74,13 @@ const ROLE_CONFIG: Record<
   },
 };
 
-export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: LoginPageProps) {
-  const [selectedRole, setSelectedRole] = useState<AuthRole>('donor');
+export function LoginPage({
+  onLoginSuccess,
+  onBrowseAsGuest,
+  onOpenSupport,
+  lockedRole = null,
+}: LoginPageProps) {
+  const [selectedRole, setSelectedRole] = useState<AuthRole>(lockedRole ?? 'donor');
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
   const [fullName, setFullName] = useState('');
@@ -86,7 +93,8 @@ export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: Logi
   const [errorMsg, setErrorMsg] = useState('');
   const [nafathWaiting, setNafathWaiting] = useState(false);
 
-  const activeRoleInfo = ROLE_CONFIG[selectedRole];
+  const effectiveRole: AuthRole = lockedRole ?? selectedRole;
+  const activeRoleInfo = ROLE_CONFIG[effectiveRole];
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -111,7 +119,7 @@ export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: Logi
     onLoginSuccess({
       name: authMode === 'register' ? fullName.trim() : 'أحمد العتيبي',
       identifier: trimmedId,
-      role: selectedRole,
+      role: effectiveRole,
       phone: phone.trim() || '0931234567',
       email: isEmail ? trimmedId : 'donor@athar-sy.org',
       city: authMode === 'register' ? city : 'دمشق',
@@ -126,154 +134,225 @@ export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: Logi
       onLoginSuccess({
         name: 'عبدالرحمن الحلبي',
         identifier: '0104829102',
-        role: selectedRole,
+        role: effectiveRole,
         city: 'دمشق',
       });
     }, 900);
   };
 
   return (
-    <div
+    <motion.div
       dir="rtl"
-      className="min-h-screen w-full bg-gradient-to-b from-surface to-surface-container-lowest flex items-center justify-center p-4 sm:p-8"
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+      exit={{opacity: 0}}
+      transition={{duration: 0.28, ease: 'easeOut'}}
+      className="fixed inset-0 z-50 overflow-y-auto overscroll-contain bg-[#001d32]/35 backdrop-blur-sm"
     >
-      <div className="w-full max-w-[1216px] bg-surface-container-lowest rounded-xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[780px]">
+      <div
+        style={{perspective: 1400}}
+        className="min-h-full w-full flex items-center justify-center p-3 sm:p-5"
+      >
+        <motion.div
+          initial={{opacity: 0, rotateX: 8, y: 44, scale: 0.91}}
+          animate={{opacity: 1, rotateX: 0, y: 0, scale: 1}}
+          exit={{opacity: 0, y: 24, scale: 0.94}}
+          transition={{type: 'spring', stiffness: 120, damping: 16, mass: 0.9}}
+          className="relative w-full max-w-[960px] bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12"
+        >
+        {/* Close Login Screen Button */}
+        <button
+          type="button"
+          onClick={onBrowseAsGuest}
+          aria-label="إغلاق صفحة تسجيل الدخول"
+          title="إغلاق"
+          className="absolute top-3 left-3 z-30 w-9 h-9 rounded-full bg-surface-container-low/95 hover:bg-surface-container-high text-on-surface-variant hover:text-primary border border-surface-variant/70 shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
+        >
+          <AppIcon name="close" size={18} />
+        </button>
+
         {/* Right Side (Columns: 5): Deep Nautical Brand & Sovereign Verification Story */}
-        <aside className="lg:col-span-5 bg-gradient-to-br from-[#002b46] via-primary to-[#00575b] text-on-primary p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden isolate gap-7">
+        <motion.aside
+          initial={{opacity: 0, x: 70}}
+          animate={{opacity: 1, x: 0}}
+          transition={{type: 'spring', stiffness: 115, damping: 18, delay: 0.08}}
+          className="lg:col-span-5 bg-gradient-to-br from-[#002b46] via-primary to-[#00575b] text-on-primary p-5 lg:p-6 flex flex-col justify-between relative overflow-hidden isolate gap-4"
+        >
           {/* Ambient Medical & Architectural Geometric Overlays */}
-          <div className="absolute w-96 h-96 -right-28 -top-28 bg-secondary/35 blur-3xl rounded-full pointer-events-none" />
-          <div className="absolute w-80 h-80 -left-24 bottom-6 bg-tertiary-fixed-dim/15 blur-3xl rounded-full pointer-events-none" />
-          <div className="absolute w-[420px] h-[420px] -left-44 -top-44 border border-white/10 rounded-full pointer-events-none" />
-          <div className="absolute w-[300px] h-[300px] -right-32 -bottom-32 border border-secondary-fixed/15 rounded-full pointer-events-none" />
+          <div className="absolute w-72 h-72 -right-24 -top-24 bg-secondary/35 blur-3xl rounded-full pointer-events-none" />
+          <div className="absolute w-64 h-64 -left-20 bottom-4 bg-tertiary-fixed-dim/15 blur-3xl rounded-full pointer-events-none" />
+          <div className="absolute w-[340px] h-[340px] -left-36 -top-36 border border-white/10 rounded-full pointer-events-none" />
+          <div className="absolute w-[240px] h-[240px] -right-24 -bottom-24 border border-secondary-fixed/15 rounded-full pointer-events-none" />
 
           {/* Top Header & Brand Identity */}
-          <div className="relative z-10 flex flex-col gap-6">
-            <div className="flex items-center justify-between gap-3">
-              <div className="bg-surface-container-lowest rounded-2xl px-3.5 py-2.5 shadow-lg ring-1 ring-white/25 flex items-center gap-3">
+          <motion.div
+            initial={{opacity: 0, scale: 0.92, y: -14}}
+            animate={{opacity: 1, scale: 1, y: 0}}
+            transition={{type: 'spring', stiffness: 150, damping: 17, delay: 0.18}}
+            className="relative z-10 flex flex-col gap-3.5"
+          >
+            <div className="flex items-center justify-between gap-2 pl-11 lg:pl-0">
+              <div className="bg-surface-container-lowest rounded-xl px-3 py-2 shadow-lg ring-1 ring-white/25 flex items-center gap-2.5">
                 <img
                   src={ATHAR_LOGO_URL}
                   alt="شعار منصة أثر"
-                  className="h-10 w-auto object-contain shrink-0"
+                  className="h-8 w-auto object-contain shrink-0"
                 />
                 <div className="flex flex-col leading-tight">
-                  <span className="font-headline-sm text-[21px] font-extrabold text-primary leading-none">
+                  <span className="font-headline-sm text-[18px] font-extrabold text-primary leading-none">
                     أثر
                   </span>
-                  <span className="font-label-sm text-[11px] font-semibold text-secondary whitespace-nowrap mt-1">
+                  <span className="font-label-sm text-[10px] font-semibold text-secondary whitespace-nowrap mt-0.5">
                     للعطاء الصحي الموثق
                   </span>
                 </div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-md border border-secondary-fixed/30 rounded-full px-3.5 py-1.5 flex items-center gap-2 shrink-0 shadow-xs">
+              <div className="bg-white/12 border border-secondary-fixed/30 rounded-full px-3 py-1 flex items-center gap-1.5 shrink-0 shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse" />
-                <span className="text-secondary-fixed font-label-sm text-[11px] font-bold">
+                <span className="text-secondary-fixed font-label-sm text-[10.5px] font-bold">
                   منصة موثقة
                 </span>
               </div>
             </div>
 
             {/* Quranic Spiritual Anchor Card */}
-            <div className="bg-gradient-to-b from-white/14 to-white/[0.06] backdrop-blur-md border border-tertiary-fixed/25 rounded-2xl p-5 text-center shadow-lg relative overflow-hidden">
-              <div className="w-12 h-1 rounded-full bg-gradient-to-r from-transparent via-tertiary-fixed-dim to-transparent mx-auto mb-3" />
-              <p className="font-headline-sm text-[19px] font-bold text-tertiary-fixed leading-relaxed">
+            <div className="bg-gradient-to-b from-white/14 to-white/[0.07] border border-tertiary-fixed/25 rounded-xl p-3.5 text-center shadow-lg relative overflow-hidden">
+              <motion.div
+                initial={{x: '-140%'}}
+                animate={{x: '240%'}}
+                transition={{duration: 0.95, delay: 0.45, ease: 'easeInOut'}}
+                className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 pointer-events-none"
+              />
+              <div className="w-10 h-0.5 rounded-full bg-gradient-to-r from-transparent via-tertiary-fixed-dim to-transparent mx-auto mb-2" />
+              <p className="font-headline-sm text-[16px] font-bold text-tertiary-fixed leading-relaxed">
                 ﴿وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعًا﴾
               </p>
-              <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/10 border border-white/10">
-                <span className="font-label-sm text-[11px] font-semibold text-primary-fixed">
+              <div className="mt-1.5 inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10">
+                <span className="font-label-sm text-[10px] font-semibold text-primary-fixed">
                   سورة المائدة — الآية 32
                 </span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Clinical Transparency & Security Matrix */}
-          <div className="relative z-10 space-y-3">
-            <div className="bg-white/[0.07] hover:bg-white/[0.11] transition-colors border border-white/12 rounded-2xl p-4 flex items-start gap-3.5 backdrop-blur-sm">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-secondary-fixed/25 to-white/5 border border-secondary-fixed/25 flex items-center justify-center shrink-0 text-secondary-fixed shadow-xs">
-                <AppIcon name="account_balance" size={20} />
+          <div className="relative z-10 space-y-2">
+            <motion.div
+              initial={{opacity: 0, x: 32, scale: 0.95}}
+              animate={{opacity: 1, x: 0, scale: 1}}
+              transition={{type: 'spring', stiffness: 145, damping: 16, delay: 0.26}}
+              className="bg-white/[0.08] hover:bg-white/[0.12] transition-colors border border-white/12 rounded-xl p-3 flex items-start gap-3"
+            >
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-secondary-fixed/25 to-white/5 border border-secondary-fixed/25 flex items-center justify-center shrink-0 text-secondary-fixed shadow-xs">
+                <AppIcon name="account_balance" size={18} />
               </div>
               <div className="space-y-0.5">
-                <h3 className="font-body-lg text-[15px] font-bold text-on-primary">
+                <h3 className="font-body-lg text-[13.5px] font-bold text-on-primary">
                   تحويل مباشر 100% للمستشفيات
                 </h3>
-                <p className="font-body-sm text-[12px] text-primary-fixed/85 leading-relaxed">
+                <p className="font-body-sm text-[11px] text-primary-fixed/85 leading-snug">
                   لا استقطاع إداري أو وسطاء ماليين على تبرعك العلاجي
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white/[0.07] hover:bg-white/[0.11] transition-colors border border-white/12 rounded-2xl p-4 flex items-start gap-3.5 backdrop-blur-sm">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-tertiary-fixed/25 to-white/5 border border-tertiary-fixed/25 flex items-center justify-center shrink-0 text-tertiary-fixed shadow-xs">
-                <AppIcon name="health_and_safety" size={20} />
+            <motion.div
+              initial={{opacity: 0, x: 32, scale: 0.95}}
+              animate={{opacity: 1, x: 0, scale: 1}}
+              transition={{type: 'spring', stiffness: 145, damping: 16, delay: 0.34}}
+              className="bg-white/[0.08] hover:bg-white/[0.12] transition-colors border border-white/12 rounded-xl p-3 flex items-start gap-3"
+            >
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-tertiary-fixed/25 to-white/5 border border-tertiary-fixed/25 flex items-center justify-center shrink-0 text-tertiary-fixed shadow-xs">
+                <AppIcon name="health_and_safety" size={18} />
               </div>
               <div className="space-y-0.5">
-                <h3 className="font-body-lg text-[15px] font-bold text-on-primary">
+                <h3 className="font-body-lg text-[13.5px] font-bold text-on-primary">
                   تدقيق طبي وشرعي مستقل
                 </h3>
-                <p className="font-body-sm text-[12px] text-primary-fixed/85 leading-relaxed">
+                <p className="font-body-sm text-[11px] text-primary-fixed/85 leading-snug">
                   اعتماد كل حالة من لجان استشارية وشرعية مرخصة رسمياً
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white/[0.07] hover:bg-white/[0.11] transition-colors border border-white/12 rounded-2xl p-4 flex items-start gap-3.5 backdrop-blur-sm">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-secondary-fixed-dim/25 to-white/5 border border-secondary-fixed-dim/25 flex items-center justify-center shrink-0 text-secondary-fixed-dim shadow-xs">
-                <AppIcon name="verified_user" size={20} />
+            <motion.div
+              initial={{opacity: 0, x: 32, scale: 0.95}}
+              animate={{opacity: 1, x: 0, scale: 1}}
+              transition={{type: 'spring', stiffness: 145, damping: 16, delay: 0.42}}
+              className="bg-white/[0.08] hover:bg-white/[0.12] transition-colors border border-white/12 rounded-xl p-3 flex items-start gap-3"
+            >
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-secondary-fixed-dim/25 to-white/5 border border-secondary-fixed-dim/25 flex items-center justify-center shrink-0 text-secondary-fixed-dim shadow-xs">
+                <AppIcon name="verified_user" size={18} />
               </div>
               <div className="space-y-0.5">
-                <h3 className="font-body-lg text-[15px] font-bold text-on-primary">
+                <h3 className="font-body-lg text-[13.5px] font-bold text-on-primary">
                   حماية البيانات وخصوصية المرضى
                 </h3>
-                <p className="font-body-sm text-[12px] text-primary-fixed/85 leading-relaxed">
+                <p className="font-body-sm text-[11px] text-primary-fixed/85 leading-snug">
                   تشفير كامل وسجل شفاف لتقارير الأثر والشفاء والسندات في سوريا
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Trust Metrics & Footer Audit Indicator */}
-          <div className="relative z-10 space-y-4">
-            <div className="grid grid-cols-2 gap-2.5">
-              <div className="bg-white/[0.06] border border-white/10 rounded-xl px-3.5 py-2.5 text-center">
-                <div className="font-numeral-md text-[17px] font-extrabold text-tertiary-fixed">
+          <motion.div
+            initial={{opacity: 0, y: 18}}
+            animate={{opacity: 1, y: 0}}
+            transition={{type: 'spring', stiffness: 140, damping: 18, delay: 0.48}}
+            className="relative z-10 space-y-2.5"
+          >
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-white/[0.06] border border-white/10 rounded-xl px-3 py-1.5 text-center">
+                <div className="font-numeral-md text-[15px] font-extrabold text-tertiary-fixed">
                   100%
                 </div>
-                <div className="font-body-sm text-[11px] text-primary-fixed/85">
+                <div className="font-body-sm text-[10.5px] text-primary-fixed/85">
                   وصول مباشر للعلاج
                 </div>
               </div>
-              <div className="bg-white/[0.06] border border-white/10 rounded-xl px-3.5 py-2.5 text-center">
-                <div className="font-numeral-md text-[17px] font-extrabold text-secondary-fixed">
+              <div className="bg-white/[0.06] border border-white/10 rounded-xl px-3 py-1.5 text-center">
+                <div className="font-numeral-md text-[15px] font-extrabold text-secondary-fixed">
                   0.0%
                 </div>
-                <div className="font-body-sm text-[11px] text-primary-fixed/85">
+                <div className="font-body-sm text-[10.5px] text-primary-fixed/85">
                   رسوم أو استقطاع إداري
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-3.5 border-t border-white/15">
-              <div className="flex items-center gap-2 text-[12px] text-primary-fixed">
-                <AppIcon name="verified" size={16} className="text-secondary-fixed" />
+            <div className="flex items-center justify-between pt-2.5 border-t border-white/15">
+              <div className="flex items-center gap-1.5 text-[11px] text-primary-fixed">
+                <AppIcon name="verified" size={14} className="text-secondary-fixed" />
                 <span>بوابة موثقة ومعتمدة 100%</span>
               </div>
-              <span className="font-numeral-md text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-white/10 text-primary-fixed">
+              <span className="font-numeral-md text-[10.5px] font-semibold px-2 py-0.5 rounded-md bg-white/10 text-primary-fixed">
                 ATHAR v2.4
               </span>
             </div>
-          </div>
-        </aside>
+          </motion.div>
+        </motion.aside>
 
         {/* Left Side (Columns: 7): Interactive Role-Based Auth Core */}
-        <section className="lg:col-span-7 bg-gradient-to-b from-surface-container-lowest to-surface/60 p-6 sm:p-10 lg:p-12 flex flex-col justify-center">
-          <div className="w-full max-w-xl mx-auto space-y-6">
+        <motion.section
+          initial={{opacity: 0, x: -70}}
+          animate={{opacity: 1, x: 0}}
+          transition={{type: 'spring', stiffness: 115, damping: 18, delay: 0.12}}
+          className="lg:col-span-7 bg-gradient-to-b from-surface-container-lowest to-surface/60 px-5 pb-5 pt-11 sm:px-7 sm:pb-7 sm:pt-12 lg:px-8 lg:pb-7 lg:pt-12 flex flex-col justify-center"
+        >
+          <motion.div
+            initial={{opacity: 0, y: 18}}
+            animate={{opacity: 1, y: 0}}
+            transition={{type: 'spring', stiffness: 140, damping: 18, delay: 0.22}}
+            className="w-full max-w-lg mx-auto space-y-4"
+          >
             {/* Header Sub-Bar */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between gap-2 text-[12px]">
-                <div className="inline-flex items-center gap-2 bg-secondary/10 border border-secondary/20 px-3 py-1 rounded-full">
-                  <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                  <span className="font-label-md text-[12px] font-bold text-secondary">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between gap-2 text-[11.5px]">
+                <div className="inline-flex items-center gap-1.5 bg-secondary/10 border border-secondary/20 px-2.5 py-0.5 rounded-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+                  <span className="font-label-md text-[11px] font-bold text-secondary">
                     بوابة الدخول الموحد الآمنة
                   </span>
                 </div>
@@ -289,29 +368,41 @@ export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: Logi
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="space-y-1">
-                  <h1 className="font-headline-lg text-[28px] sm:text-[32px] font-extrabold text-primary tracking-tight leading-tight">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <h1 className="font-headline-lg text-[22px] sm:text-[26px] font-extrabold text-primary tracking-tight leading-tight">
                     {authMode === 'login' ? 'تسجيل الدخول الموحد' : 'إنشاء حساب جديد'}
                   </h1>
-                  <p className="font-body-md text-[14px] text-on-surface-variant">
+                  <p className="font-body-md text-[13px] text-on-surface-variant">
                     {authMode === 'login'
-                      ? 'اختر صفتك في منصة أثر للوصول إلى لوحتك المخصصة'
-                      : 'أنشئ حسابك الموثق للمساهمة في صناعة الشفاء ومتابعة الأثر'}
+                      ? lockedRole === 'donor'
+                        ? 'سجّل دخولك كمتبرع للمساهمة في الحالات الحرجة ومتابعة تبرعاتك'
+                        : lockedRole === 'patient'
+                          ? 'سجّل دخولك كمريض لتقديم طلب مساعدة علاجية ومتابعة ملفك الطبي'
+                          : 'اختر صفتك في منصة أثر للوصول إلى لوحتك المخصصة'
+                      : lockedRole === 'patient'
+                        ? 'أنشئ حساب مريض موثق لتقديم طلب مساعدة علاجية ومتابعة المراجعة الطبية'
+                        : 'أنشئ حسابك الموثق للمساهمة في صناعة الشفاء ومتابعة الأثر'}
                   </p>
                 </div>
 
                 {/* Auth Mode Segmented Switch */}
-                <div className="flex items-center bg-surface-container p-1.5 rounded-2xl border border-surface-variant/60">
+                <div className="relative grid grid-cols-2 items-center bg-surface-container p-1 rounded-xl border border-surface-variant/60">
+                  <span
+                    aria-hidden="true"
+                    className={`absolute top-1 bottom-1 right-1 w-[calc(50%-4px)] rounded-lg bg-surface-container-lowest shadow-sm ring-1 ring-primary/10 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      authMode === 'register' ? '-translate-x-full' : 'translate-x-0'
+                    }`}
+                  />
                   <button
                     type="button"
                     onClick={() => {
                       setAuthMode('login');
                       setErrorMsg('');
                     }}
-                    className={`px-3.5 py-2 rounded-xl font-label-md text-[12px] transition-all cursor-pointer whitespace-nowrap ${
+                    className={`relative z-10 px-3 py-1.5 rounded-lg font-label-md text-[11.5px] transition-colors duration-200 cursor-pointer whitespace-nowrap text-center ${
                       authMode === 'login'
-                        ? 'bg-surface-container-lowest text-primary font-bold shadow-sm ring-1 ring-primary/10'
+                        ? 'text-primary font-bold'
                         : 'text-on-surface-variant hover:text-primary'
                     }`}
                   >
@@ -323,9 +414,9 @@ export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: Logi
                       setAuthMode('register');
                       setErrorMsg('');
                     }}
-                    className={`px-3.5 py-2 rounded-xl font-label-md text-[12px] transition-all cursor-pointer whitespace-nowrap ${
+                    className={`relative z-10 px-3 py-1.5 rounded-lg font-label-md text-[11.5px] transition-colors duration-200 cursor-pointer whitespace-nowrap text-center ${
                       authMode === 'register'
-                        ? 'bg-surface-container-lowest text-primary font-bold shadow-sm ring-1 ring-primary/10'
+                        ? 'text-primary font-bold'
                         : 'text-on-surface-variant hover:text-primary'
                     }`}
                   >
@@ -336,117 +427,132 @@ export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: Logi
             </div>
 
             {/* Role Switcher Cards Bar */}
-            <div className="grid grid-cols-3 gap-2.5">
-              {(['donor', 'patient', 'charity'] as AuthRole[]).map((roleKey) => {
-                const role = ROLE_CONFIG[roleKey];
-                const isActive = selectedRole === roleKey;
-                return (
-                  <button
-                    key={roleKey}
-                    type="button"
-                    onClick={() => setSelectedRole(roleKey)}
-                    className={`px-3 py-2.5 rounded-xl text-[13px] border flex items-center justify-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
-                      isActive
-                        ? 'bg-gradient-to-l from-primary to-[#005559] text-on-primary font-bold border-transparent shadow-md'
-                        : 'bg-surface-container-low/80 border-surface-variant/70 text-on-surface-variant hover:text-primary hover:border-secondary/40 hover:bg-surface-container'
-                    }`}
-                  >
-                    <AppIcon name={role.icon} size={16} />
-                    <span>{role.shortLabel}</span>
-                  </button>
-                );
-              })}
-            </div>
+            {!lockedRole && (
+              <div className="grid grid-cols-3 gap-2">
+                {(['donor', 'patient', 'charity'] as AuthRole[]).map((roleKey) => {
+                  const role = ROLE_CONFIG[roleKey];
+                  const isActive = effectiveRole === roleKey;
+                  return (
+                    <button
+                      key={roleKey}
+                      type="button"
+                      onClick={() => setSelectedRole(roleKey)}
+                      className={`px-2.5 py-2 rounded-xl text-[12.5px] border flex items-center justify-center gap-1.5 transition-all cursor-pointer whitespace-nowrap ${
+                        isActive
+                          ? 'bg-gradient-to-l from-primary to-[#005559] text-on-primary font-bold border-transparent shadow-md'
+                          : 'bg-surface-container-low/80 border-surface-variant/70 text-on-surface-variant hover:text-primary hover:border-secondary/40 hover:bg-surface-container'
+                      }`}
+                    >
+                      <AppIcon name={role.icon} size={15} />
+                      <span>{role.shortLabel}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Dynamic Role Guidance Micro-banner */}
-            <div className="bg-gradient-to-l from-surface-container-low via-surface-container/80 to-secondary/[0.07] border border-secondary/15 rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5 text-[12.5px] text-on-surface min-w-0">
-                <div className="w-8 h-8 rounded-lg bg-secondary/15 text-secondary flex items-center justify-center shrink-0">
-                  <AppIcon name={activeRoleInfo.icon} size={16} />
+            <div className="bg-gradient-to-l from-surface-container-low via-surface-container/80 to-secondary/[0.07] border border-secondary/15 rounded-xl px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2 text-[12px] text-on-surface min-w-0">
+                <div className="w-7 h-7 rounded-lg bg-secondary/15 text-secondary flex items-center justify-center shrink-0">
+                  <AppIcon name={activeRoleInfo.icon} size={15} />
                 </div>
                 <span className="leading-snug">{activeRoleInfo.guidance}</span>
               </div>
-              <span className="bg-secondary-fixed text-on-secondary-fixed font-label-sm text-[11px] font-bold px-3 py-1 rounded-full whitespace-nowrap shadow-2xs">
+              <span className="bg-secondary-fixed text-on-secondary-fixed font-label-sm text-[10.5px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap shadow-2xs">
                 {activeRoleInfo.badge}
               </span>
             </div>
 
             {/* Credential Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="flex flex-col">
               {errorMsg && (
-                <div className="bg-error-container border border-error/20 text-on-error-container px-4 py-3 rounded-xl text-[13px] font-semibold flex items-center gap-2">
+                <div className="mb-3 bg-error-container border border-error/20 text-on-error-container px-4 py-3 rounded-xl text-[13px] font-semibold flex items-center gap-2">
                   <AppIcon name="emergency" size={16} />
                   <span>{errorMsg}</span>
                 </div>
               )}
 
-              {authMode === 'register' && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="auth-fullname"
-                      className="block font-label-md text-[13px] font-semibold text-on-surface"
-                    >
-                      الاسم الكامل
-                    </label>
-                    <input
-                      id="auth-fullname"
-                      type="text"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="مثال: محمد بن عبدالله"
-                      className="w-full h-12 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl px-4 font-body-md text-[14px] text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="auth-city"
-                      className="block font-label-md text-[13px] font-semibold text-on-surface"
-                    >
-                      المدينة / المحافظة
-                    </label>
-                    <select
-                      id="auth-city"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      className="w-full h-12 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl px-3 font-body-md text-[14px] text-on-surface focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all cursor-pointer"
-                    >
-                      {SYRIAN_GOVERNORATES.map((gov) => (
-                        <option key={gov.key} value={gov.label}>
-                          {gov.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="auth-phone"
-                      className="block font-label-md text-[13px] font-semibold text-on-surface"
-                    >
-                      رقم الجوال (اختياري)
-                    </label>
-                    <input
-                      id="auth-phone"
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="09XXXXXXXX"
-                      className="w-full h-12 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl px-4 font-numeral-md text-[14px] text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all"
-                    />
+              <div
+                aria-hidden={authMode !== 'register'}
+                className={`grid transition-[grid-template-rows,opacity,transform,margin] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  authMode === 'register'
+                    ? 'grid-rows-[1fr] opacity-100 translate-y-0 mb-3'
+                    : 'grid-rows-[0fr] opacity-0 -translate-y-2 mb-0 pointer-events-none'
+                }`}
+              >
+                <div className="overflow-hidden min-h-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-0.5 pb-1">
+                    <div className="space-y-1">
+                      <label
+                        htmlFor="auth-fullname"
+                        className="block font-label-md text-[12.5px] font-semibold text-on-surface"
+                      >
+                        الاسم الكامل
+                      </label>
+                      <input
+                        id="auth-fullname"
+                        type="text"
+                        tabIndex={authMode === 'register' ? 0 : -1}
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="مثال: محمد بن عبدالله"
+                        className="w-full h-10 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl px-3.5 font-body-md text-[13px] text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label
+                        htmlFor="auth-city"
+                        className="block font-label-md text-[12.5px] font-semibold text-on-surface"
+                      >
+                        المدينة / المحافظة
+                      </label>
+                      <select
+                        id="auth-city"
+                        tabIndex={authMode === 'register' ? 0 : -1}
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="w-full h-10 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl px-2.5 font-body-md text-[13px] text-on-surface focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all cursor-pointer"
+                      >
+                        {SYRIAN_GOVERNORATES.map((gov) => (
+                          <option key={gov.key} value={gov.label}>
+                            {gov.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="space-y-1">
+                      <label
+                        htmlFor="auth-phone"
+                        className="block font-label-md text-[12.5px] font-semibold text-on-surface"
+                      >
+                        رقم الجوال (اختياري)
+                      </label>
+                      <input
+                        id="auth-phone"
+                        type="tel"
+                        tabIndex={authMode === 'register' ? 0 : -1}
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="09XXXXXXXX"
+                        className="w-full h-10 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl px-3.5 font-numeral-md text-[13px] text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all"
+                      />
+                    </div>
                   </div>
                 </div>
-              )}
+              </div>
 
+              <div className="space-y-3">
               {/* Identity / Email Field */}
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="auth-identifier"
-                    className="font-label-md text-[13px] font-semibold text-on-surface"
+                    className="font-label-md text-[12.5px] font-semibold text-on-surface"
                   >
                     رقم الهوية الوطنية أو البريد الإلكتروني
                   </label>
-                  <span className="font-label-sm text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-md">
+                  <span className="font-label-sm text-[10.5px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-md">
                     إلزامي
                   </span>
                 </div>
@@ -457,20 +563,20 @@ export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: Logi
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
                     placeholder="أدخل البريد الإلكتروني أو رقم الهوية..."
-                    className="w-full h-12 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl pr-4 pl-11 font-body-md text-[14px] text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all"
+                    className="w-full h-10 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl pr-3.5 pl-10 font-body-md text-[13px] text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all"
                   />
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-outline">
-                    <AppIcon name="person" size={18} />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-outline">
+                    <AppIcon name="person" size={17} />
                   </span>
                 </div>
               </div>
 
               {/* Password Field */}
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="auth-password"
-                    className="font-label-md text-[13px] font-semibold text-on-surface"
+                    className="font-label-md text-[12.5px] font-semibold text-on-surface"
                   >
                     كلمة المرور
                   </label>
@@ -478,7 +584,7 @@ export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: Logi
                     <button
                       type="button"
                       onClick={onOpenSupport}
-                      className="font-label-md text-[13px] font-semibold text-secondary hover:text-primary hover:underline transition-colors cursor-pointer"
+                      className="font-label-md text-[12px] font-semibold text-secondary hover:text-primary hover:underline transition-colors cursor-pointer"
                     >
                       نسيت كلمة المرور؟
                     </button>
@@ -491,55 +597,57 @@ export function LoginPage({onLoginSuccess, onBrowseAsGuest, onOpenSupport}: Logi
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••"
-                    className="w-full h-12 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl pr-4 pl-11 font-numeral-md text-[14px] text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all"
+                    className="w-full h-10 bg-surface-container-low/70 border border-surface-variant/80 hover:border-secondary/40 rounded-xl pr-3.5 pl-10 font-numeral-md text-[13px] text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-secondary focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
                     aria-label={showPassword ? 'إخفاء كلمة المرور' : 'عرض كلمة المرور'}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary p-1.5 rounded-lg hover:bg-surface-container transition-colors cursor-pointer"
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 text-outline hover:text-primary p-1 rounded-lg hover:bg-surface-container transition-colors cursor-pointer"
                   >
-                    <AppIcon name="visibility" size={18} />
+                    <AppIcon name="visibility" size={17} />
                   </button>
                 </div>
               </div>
 
               {/* Remember Me & Trust Device */}
-              <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                <label className="flex items-center gap-2 text-[12.5px] text-on-surface-variant cursor-pointer select-none">
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
+                <label className="flex items-center gap-2 text-[12px] text-on-surface-variant cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={rememberDevice}
                     onChange={(e) => setRememberDevice(e.target.checked)}
-                    className="w-4 h-4 accent-secondary rounded cursor-pointer"
+                    className="w-3.5 h-3.5 accent-secondary rounded cursor-pointer"
                   />
                   <span>تذكرني على هذا الجهاز الموثوق</span>
                 </label>
 
-                <div className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-secondary bg-secondary/10 px-2.5 py-1 rounded-full">
+                <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-secondary bg-secondary/10 px-2.5 py-0.5 rounded-full">
                   <span>اتصال مشفر SSL</span>
-                  <AppIcon name="lock" size={13} />
+                  <AppIcon name="lock" size={12} />
                 </div>
               </div>
 
               {/* Primary Submission Action */}
-              <div className="pt-2">
+              <div className="pt-1">
                 <button
                   type="submit"
-                  className="w-full h-13 bg-gradient-to-l from-tertiary-fixed-dim via-tertiary-fixed to-tertiary-fixed-dim hover:brightness-[0.97] active:scale-[0.99] text-on-tertiary-fixed font-title-md text-[17px] font-extrabold rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+                  className="w-full h-11 bg-gradient-to-l from-tertiary-fixed-dim via-tertiary-fixed to-tertiary-fixed-dim hover:brightness-[0.97] active:scale-[0.99] text-on-tertiary-fixed font-title-md text-[15px] font-extrabold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>
                     {authMode === 'login'
                       ? `تسجيل الدخول (${activeRoleInfo.shortLabel})`
                       : `إنشاء حساب (${activeRoleInfo.shortLabel})`}
                   </span>
-                  <AppIcon name="arrow_right_alt" size={18} className="rotate-180" />
+                  <AppIcon name="arrow_right_alt" size={17} className="rotate-180" />
                 </button>
               </div>
+              </div>
             </form>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -1,3 +1,4 @@
+import {motion} from 'motion/react';
 import {ATHAR_LOGO_URL, PortalRole} from '../data/atharData';
 import {AppIcon} from './AppIcon';
 
@@ -27,7 +28,13 @@ export function Footer({
       <div className="absolute -bottom-32 -left-24 w-96 h-96 rounded-full bg-tertiary-fixed-dim/10 blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-[1280px] mx-auto px-margin-sm md:px-margin pt-space-xl pb-space-lg relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-space-lg pb-space-xl">
+        <motion.div
+          initial={{opacity: 0, y: 16}}
+          whileInView={{opacity: 1, y: 0}}
+          viewport={{once: true, amount: 0.1}}
+          transition={{duration: 0.75, ease: [0.16, 1, 0.3, 1]}}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-space-lg pb-space-xl"
+        >
           {/* Brand Column */}
           <div className="lg:col-span-4 space-y-space-md">
             <div className="flex items-center gap-space-sm">
@@ -202,7 +209,7 @@ export function Footer({
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Bottom Copyright & Legal Strip */}
         <div className="pt-space-md border-t border-white/15 flex flex-col md:flex-row items-center justify-between gap-space-sm font-body-sm text-[12.5px] text-primary-fixed/80">

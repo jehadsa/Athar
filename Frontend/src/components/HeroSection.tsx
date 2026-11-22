@@ -1,4 +1,5 @@
-import {FormEvent} from 'react';
+import {motion, useScroll, useSpring, useTransform} from 'motion/react';
+import {FormEvent, useRef} from 'react';
 import {
   HERO_VISUAL_URL,
   PriorityKey,
@@ -34,31 +35,68 @@ export function HeroSection({
   onOpenApplyModal,
   lang,
 }: HeroSectionProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const {scrollYProgress} = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const softScrollProgress = useSpring(scrollYProgress, {
+    stiffness: 75,
+    damping: 22,
+    mass: 0.8,
+    restDelta: 0.001,
+  });
+
+  const orbRightY = useTransform(softScrollProgress, [0, 1], [0, 80]);
+  const orbLeftY = useTransform(softScrollProgress, [0, 1], [0, -60]);
+  const visualCardY = useTransform(softScrollProgress, [0, 1], [0, 36]);
+  const visualCardScale = useTransform(softScrollProgress, [0, 1], [1, 0.975]);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     onApplyFilterSubmit();
   };
 
   return (
-    <section id="hero-section" className="relative w-full overflow-hidden pb-space-xl pt-space-lg">
-      {/* Atmospheric Ambient Circles */}
-      <div className="absolute -top-32 right-10 w-96 h-96 rounded-full bg-secondary-fixed/20 blur-3xl pointer-events-none" />
-      <div className="absolute top-48 left-0 w-[500px] h-[500px] rounded-full bg-primary-fixed/30 blur-3xl pointer-events-none" />
+    <section
+      ref={sectionRef}
+      id="hero-section"
+      className="relative w-full overflow-hidden pb-space-xl pt-space-lg"
+    >
+      {/* Atmospheric Ambient Circles with Soft Scroll Parallax */}
+      <motion.div
+        style={{y: orbRightY}}
+        className="absolute -top-32 right-10 w-96 h-96 rounded-full bg-secondary-fixed/20 blur-3xl pointer-events-none"
+      />
+      <motion.div
+        style={{y: orbLeftY}}
+        className="absolute top-48 left-0 w-[500px] h-[500px] rounded-full bg-primary-fixed/30 blur-3xl pointer-events-none"
+      />
 
       <div className="w-full max-w-[1280px] mx-auto px-margin-sm md:px-margin relative z-10">
         {/* Status Pill */}
-        <div className="flex items-center justify-start gap-space-xs mb-space-md">
+        <motion.div
+          initial={{opacity: 0, y: 10}}
+          animate={{opacity: 1, y: 0}}
+          transition={{duration: 0.65, ease: [0.16, 1, 0.3, 1]}}
+          className="flex items-center justify-start gap-space-xs mb-space-md"
+        >
           <span className="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-high text-primary font-label-md text-label-md shadow-sm">
             <span className="w-2 h-2 rounded-full bg-secondary animate-ping shrink-0" />
             {lang === 'ar'
               ? 'المنصة الوطنية المعتمدة للإسناد العلاجي التشاركي'
               : 'National Certified Collaborative Medical Support Platform'}
           </span>
-        </div>
+        </motion.div>
 
         {/* Main Asymmetric Hero Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center mb-space-xl">
-          <div className="lg:col-span-7 flex flex-col items-start space-y-space-md text-start">
+          <motion.div
+            initial={{opacity: 0, y: 16}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.75, delay: 0.08, ease: [0.16, 1, 0.3, 1]}}
+            className="lg:col-span-7 flex flex-col items-start space-y-space-md text-start"
+          >
             <h1 className="w-full font-display text-display-mobile md:text-display text-primary leading-tight">
               أثر — مجتمع متكامل <br />
               <span className="text-secondary">لصناعة الشفاء</span> وتفريج الكرب الطبي
@@ -78,6 +116,14 @@ export function HeroSection({
               >
                 <AppIcon name="volunteer_activism" size={22} />
                 <span>تبرع الآن للحالات الحرجة</span>
+              </button>
+              <button
+                type="button"
+                onClick={onOpenApplyModal}
+                className="px-space-lg py-space-md rounded-xl bg-surface-container-lowest text-secondary font-title-md text-title-md hover:bg-surface-container-low shadow-md shadow-primary/5 border border-surface-container/60 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-space-xs cursor-pointer whitespace-nowrap"
+              >
+                <AppIcon name="medical_bag" size={22} />
+                <span>تقديم طلب مساعدة علاجية</span>
               </button>
             </div>
 
@@ -100,10 +146,16 @@ export function HeroSection({
                 <span>متوافق مع الهيئة الشرعية</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Hero Visual / Clinical Compass Card */}
-          <div className="lg:col-span-5 relative">
+          {/* Hero Visual / Clinical Compass Card with Soft Scroll Parallax */}
+          <motion.div
+            initial={{opacity: 0, y: 18, scale: 0.98}}
+            animate={{opacity: 1, y: 0, scale: 1}}
+            transition={{duration: 0.8, delay: 0.14, ease: [0.16, 1, 0.3, 1]}}
+            style={{y: visualCardY, scale: visualCardScale}}
+            className="lg:col-span-5 relative"
+          >
             <div className="relative bg-surface-container-lowest rounded-2xl p-space-md shadow-xl overflow-hidden">
               <div className="relative h-72 w-full rounded-xl overflow-hidden mb-space-md">
                 <ResilientImage
@@ -146,11 +198,17 @@ export function HeroSection({
                 </span>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Quick Triage Filter Bar */}
-        <div className="bg-surface-container-lowest rounded-2xl p-space-md shadow-md">
+        <motion.div
+          initial={{opacity: 0, y: 16}}
+          whileInView={{opacity: 1, y: 0}}
+          viewport={{once: true, amount: 0.15}}
+          transition={{duration: 0.75, ease: [0.16, 1, 0.3, 1]}}
+          className="bg-surface-container-lowest rounded-2xl p-space-md shadow-md"
+        >
           <form
             className="grid grid-cols-1 md:grid-cols-12 gap-space-sm items-center"
             onSubmit={handleSubmit}
@@ -238,7 +296,7 @@ export function HeroSection({
               </button>
             </div>
           </form>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
