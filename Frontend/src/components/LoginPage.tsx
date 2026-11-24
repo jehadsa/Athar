@@ -12,6 +12,7 @@ export interface AuthenticatedUser {
   phone?: string;
   email?: string;
   city?: string;
+  avatarUrl?: string;
 }
 
 interface LoginPageProps {

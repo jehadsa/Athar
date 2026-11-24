@@ -3,9 +3,15 @@ import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {AppIcon} from './components/AppIcon';
 import {
   ApplyCaseModal,
+  DonationFlags,
   DonationModal,
   UtilityModal,
 } from './components/AtharModals';
+import {
+  DonorPortalPage,
+  DonorReceipt,
+  INITIAL_DONOR_RECEIPTS,
+} from './components/DonorPortalPage';
 import {Footer} from './components/Footer';
 import {GovernanceSection} from './components/GovernanceSection';
 import {Header} from './components/Header';
@@ -57,7 +63,9 @@ const PORTAL_PREVIEW_DETAILS: Record<
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'login' | 'donor' | 'portal-preview'>('donor');
+  const [currentPage, setCurrentPage] = useState<
+    'login' | 'donor' | 'donor-portal' | 'portal-preview'
+  >('donor');
   const [currentUser, setCurrentUser] = useState<AuthenticatedUser | null>(null);
   const [loginLockedRole, setLoginLockedRole] = useState<AuthRole | null>(null);
   const [pendingTargetSection, setPendingTargetSection] = useState<string | null>(null);
@@ -68,6 +76,8 @@ export default function App() {
   const [pendingApplyCase, setPendingApplyCase] = useState<boolean>(false);
 
   const [cases, setCases] = useState<MedicalCase[]>(INITIAL_MEDICAL_CASES);
+  const [donationsHistory, setDonationsHistory] = useState<DonorReceipt[]>(INITIAL_DONOR_RECEIPTS);
+  const [walletBalance, setWalletBalance] = useState<number>(850000);
   const [totalDonations, setTotalDonations] = useState<number>(4825900000);
   const [completedSurgeries, setCompletedSurgeries] = useState<number>(1842);
 
@@ -84,6 +94,9 @@ export default function App() {
   const [donateModalOpen, setDonateModalOpen] = useState<boolean>(false);
   const [selectedDonateCase, setSelectedDonateCase] = useState<MedicalCase | null>(null);
   const [selectedDonateAmount, setSelectedDonateAmount] = useState<number | undefined>(undefined);
+  const [selectedDonateFlags, setSelectedDonateFlags] = useState<DonationFlags | undefined>(
+    undefined,
+  );
   const [applyModalOpen, setApplyModalOpen] = useState<boolean>(false);
   const [utilityModal, setUtilityModal] = useState<
     'login' | 'report' | 'privacy' | 'support' | 'portal' | null
@@ -326,17 +339,16 @@ export default function App() {
         const nextDonation = pendingDonation;
         setPendingDonation(null);
         setPendingTargetSection(null);
-        setActiveNav('medical-cases');
-        setCurrentPage('donor');
+        setCurrentPage('donor-portal');
         setSelectedDonateCase(nextDonation.medicalCase);
         setSelectedDonateAmount(nextDonation.amount);
+        setSelectedDonateFlags(undefined);
         setDonateModalOpen(true);
-        setTimeout(() => {
-          const el = document.getElementById('cases-section');
-          if (el) {
-            el.scrollIntoView({behavior: 'smooth', block: 'start'});
-          }
-        }, 80);
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      } else if (pendingTargetSection === 'donor-portal') {
+        setPendingTargetSection(null);
+        setCurrentPage('donor-portal');
+        window.scrollTo({top: 0, behavior: 'smooth'});
       } else if (pendingTargetSection === 'cases-section') {
         setActiveNav('medical-cases');
         setCurrentPage('donor');
@@ -348,8 +360,8 @@ export default function App() {
           }
         }, 80);
       } else {
-        setActiveNav('home');
-        setCurrentPage('donor');
+        setPendingTargetSection(null);
+        setCurrentPage('donor-portal');
         window.scrollTo({top: 0, behavior: 'smooth'});
       }
     } else if (user.role === 'patient' && pendingApplyCase) {
@@ -397,8 +409,16 @@ export default function App() {
   const handleSelectPortal = (portal: PortalRole) => {
     setActivePortal(portal);
     if (portal === 'donor-portal') {
-      setCurrentPage('donor');
-      smoothScrollToY(0);
+      if (currentUser?.role === 'donor') {
+        setCurrentPage('donor-portal');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      } else {
+        setPendingApplyCase(false);
+        setPendingDonation(null);
+        setLoginLockedRole('donor');
+        setPendingTargetSection('donor-portal');
+        setCurrentPage('login');
+      }
       return;
     }
     if (portal !== 'home') {
@@ -424,14 +444,50 @@ export default function App() {
     smoothScrollToElement('cases-section');
   };
 
-  const handleOpenDonateForCase = (medicalCase: MedicalCase | null, amount?: number) => {
+  const handleOpenDonateForCase = (
+    medicalCase: MedicalCase | null,
+    amount?: number,
+    flags?: DonationFlags,
+  ) => {
     setSelectedDonateCase(medicalCase);
     setSelectedDonateAmount(amount);
+    setSelectedDonateFlags(flags);
     setDonateModalOpen(true);
   };
 
-  const handleCompleteDonation = (caseId: string, amount: number) => {
+  const handleCompleteDonation = (
+    caseId: string,
+    amount: number,
+    method: string,
+    flags?: DonationFlags,
+  ) => {
     setTotalDonations((prev) => prev + amount);
+    if (method === 'محفظة الأثر') {
+      setWalletBalance((prev) => Math.max(0, prev - amount));
+    }
+
+    const matchedCase = cases.find((c) => c.id === caseId);
+    if (matchedCase) {
+      const today = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
+      const randomNum = Math.floor(100000 + Math.random() * 899999);
+      const nextRaised = Math.min(matchedCase.target, matchedCase.raised + amount);
+      const newReceipt: DonorReceipt = {
+        id: `rec-${Date.now()}`,
+        receiptCode: `ATH-REC-${randomNum}`,
+        caseCode: matchedCase.code,
+        caseTitle: matchedCase.title,
+        hospital: matchedCase.hospital,
+        specialty: matchedCase.specialtyLabel,
+        amount,
+        paymentMethod: method,
+        date: today,
+        status: nextRaised >= matchedCase.target ? 'مكتمل الأثر' : 'تم التحويل للمستشفى',
+        isSadaqah: flags?.isSadaqah,
+        isZakat: flags?.isZakat,
+      };
+      setDonationsHistory((prev) => [newReceipt, ...prev]);
+    }
+
     setCases((prev) =>
       prev.map((c) => {
         if (c.id !== caseId) return c;
@@ -502,12 +558,12 @@ export default function App() {
               onClick={() => {
                 setCurrentUser({...currentUser, role: 'donor'});
                 setActivePortal('donor-portal');
-                setCurrentPage('donor');
+                setCurrentPage('donor-portal');
               }}
               className="flex-1 h-12 rounded-xl bg-tertiary-fixed-dim hover:bg-tertiary-fixed text-on-tertiary-fixed font-title-md text-title-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <AppIcon name="favorite" size={18} />
-              <span>الانتقال إلى صفحة المتبرع</span>
+              <span>الانتقال إلى بوابة المتبرع</span>
             </button>
             <button
               type="button"
@@ -519,6 +575,53 @@ export default function App() {
           </div>
         </div>
       </div>
+    );
+  }
+
+  if (currentPage === 'donor-portal' && currentUser) {
+    return (
+      <>
+        <DonorPortalPage
+          currentUser={currentUser}
+          cases={cases}
+          donationsHistory={donationsHistory}
+          walletBalance={walletBalance}
+          onTopUpWallet={(amount) => setWalletBalance((prev) => prev + amount)}
+          onOpenDonateModal={(medicalCase, amount, flags) =>
+            handleOpenDonateForCase(medicalCase, amount, flags)
+          }
+          onOpenAccountModal={() => setUtilityModal('login')}
+          onUpdateUser={(updated) => setCurrentUser(updated)}
+          onOpenSupport={() => setUtilityModal('support')}
+          onBackToHome={() => {
+            setActiveNav('home');
+            setCurrentPage('donor');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+          }}
+          onLogout={handleLogout}
+        />
+
+        <DonationModal
+          isOpen={donateModalOpen}
+          selectedCase={selectedDonateCase}
+          allCases={cases}
+          initialAmount={selectedDonateAmount}
+          initialFlags={selectedDonateFlags}
+          walletBalance={walletBalance}
+          onClose={() => setDonateModalOpen(false)}
+          onCompleteDonation={handleCompleteDonation}
+        />
+
+        <UtilityModal
+          modalType={utilityModal}
+          activePortal={activePortal}
+          currentUser={currentUser}
+          onUpdateUser={(updated) => setCurrentUser(updated)}
+          onLogout={handleLogout}
+          onGoToLogin={handleLogout}
+          onClose={() => setUtilityModal(null)}
+        />
+      </>
     );
   }
 
@@ -550,14 +653,17 @@ export default function App() {
             onPriorityChange={setPriorityFilter}
             onApplyFilterSubmit={handleApplyTriageFilter}
             onDonateUrgentClick={() => {
-              if (!currentUser) {
+              if (!currentUser || currentUser.role !== 'donor') {
                 setPendingApplyCase(false);
+                setPendingDonation(null);
                 setLoginLockedRole('donor');
-                setPendingTargetSection('cases-section');
+                setPendingTargetSection('donor-portal');
                 setCurrentPage('login');
                 return;
               }
-              handleNavigateSection('cases-section', 'medical-cases');
+              setActivePortal('donor-portal');
+              setCurrentPage('donor-portal');
+              window.scrollTo({top: 0, behavior: 'smooth'});
             }}
             onOpenApplyModal={() => {
               if (!currentUser || currentUser.role !== 'patient') {
@@ -589,6 +695,7 @@ export default function App() {
                 setPendingApplyCase(false);
                 setPendingDonation({medicalCase: c, amount});
                 setLoginLockedRole('donor');
+                setPendingTargetSection('donor-portal');
                 setCurrentPage('login');
                 return;
               }
@@ -633,7 +740,19 @@ export default function App() {
 
       <StickyDonationBar
         urgentCount={urgentCount}
-        onQuickDonate={() => handleOpenDonateForCase(null)}
+        onQuickDonate={() => {
+          if (!currentUser || currentUser.role !== 'donor') {
+            setPendingApplyCase(false);
+            setPendingDonation(null);
+            setLoginLockedRole('donor');
+            setPendingTargetSection('donor-portal');
+            setCurrentPage('login');
+            return;
+          }
+          setActivePortal('donor-portal');
+          setCurrentPage('donor-portal');
+          window.scrollTo({top: 0, behavior: 'smooth'});
+        }}
         onLearnMore={() => handleNavigateSection('how-it-works-section', 'how-it-works')}
       />
 
@@ -642,6 +761,8 @@ export default function App() {
         selectedCase={selectedDonateCase}
         allCases={cases}
         initialAmount={selectedDonateAmount}
+        initialFlags={selectedDonateFlags}
+        walletBalance={currentUser?.role === 'donor' ? walletBalance : undefined}
         onClose={() => setDonateModalOpen(false)}
         onCompleteDonation={handleCompleteDonation}
       />
@@ -667,6 +788,11 @@ export default function App() {
         activePortal={activePortal}
         currentUser={currentUser}
         onUpdateUser={(updated) => setCurrentUser(updated)}
+        onOpenDonorPortal={() => {
+          setActivePortal('donor-portal');
+          setCurrentPage('donor-portal');
+          window.scrollTo({top: 0, behavior: 'smooth'});
+        }}
         onLogout={handleLogout}
         onGoToLogin={handleLogout}
         onClose={() => setUtilityModal(null)}

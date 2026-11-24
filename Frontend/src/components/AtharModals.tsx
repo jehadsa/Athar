@@ -3,13 +3,25 @@ import {MedicalCase, PORTAL_LINKS, PortalRole, SYRIAN_GOVERNORATES} from '../dat
 import {AppIcon} from './AppIcon';
 import type {AuthenticatedUser} from './LoginPage';
 
+export interface DonationFlags {
+  isSadaqah?: boolean;
+  isZakat?: boolean;
+}
+
 interface DonationModalProps {
   isOpen: boolean;
   selectedCase: MedicalCase | null;
   allCases: MedicalCase[];
   initialAmount?: number;
+  initialFlags?: DonationFlags;
+  walletBalance?: number;
   onClose: () => void;
-  onCompleteDonation: (caseId: string, amount: number, method: string) => void;
+  onCompleteDonation: (
+    caseId: string,
+    amount: number,
+    method: string,
+    flags?: DonationFlags,
+  ) => void;
 }
 
 export function DonationModal({
@@ -17,6 +29,8 @@ export function DonationModal({
   selectedCase,
   allCases,
   initialAmount,
+  initialFlags,
+  walletBalance,
   onClose,
   onCompleteDonation,
 }: DonationModalProps) {
@@ -27,8 +41,11 @@ export function DonationModal({
   const [amount, setAmount] = useState<number>(initialAmount || 100000);
   const [customAmount, setCustomAmount] = useState<string>('');
   const [paymentMethod, setPaymentMethod] = useState<string>('شام كاش');
+  const [isSadaqah, setIsSadaqah] = useState<boolean>(Boolean(initialFlags?.isSadaqah));
+  const [isZakat, setIsZakat] = useState<boolean>(Boolean(initialFlags?.isZakat));
   const [donorPhone, setDonorPhone] = useState<string>('');
   const [receiptCode, setReceiptCode] = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {
@@ -36,8 +53,11 @@ export function DonationModal({
       setAmount(initialAmount || (selectedCase?.presets?.[1] ?? 100000));
       setCustomAmount('');
       setReceiptCode(null);
+      setPaymentError('');
+      setIsSadaqah(Boolean(initialFlags?.isSadaqah));
+      setIsZakat(Boolean(initialFlags?.isZakat));
     }
-  }, [isOpen, selectedCase, initialAmount]);
+  }, [isOpen, selectedCase, initialAmount, initialFlags]);
 
   if (!isOpen) return null;
 
@@ -49,7 +69,18 @@ export function DonationModal({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!currentCase || !finalAmount || finalAmount <= 0) return;
-    onCompleteDonation(currentCase.id, finalAmount, paymentMethod);
+    if (
+      paymentMethod === 'محفظة الأثر' &&
+      typeof walletBalance === 'number' &&
+      finalAmount > walletBalance
+    ) {
+      setPaymentError(
+        `رصيد محفظة الأثر الحالي (${walletBalance.toLocaleString('en-US')} ل.س) غير كافٍ لهذا المبلغ.`,
+      );
+      return;
+    }
+    setPaymentError('');
+    onCompleteDonation(currentCase.id, finalAmount, paymentMethod, {isSadaqah, isZakat});
     const randomNum = Math.floor(100000 + Math.random() * 899999);
     setReceiptCode(`ATH-REC-${randomNum}`);
   };
@@ -200,13 +231,26 @@ export function DonationModal({
               <label className="font-label-md text-label-md text-on-surface-variant block">
                 وسيلة الدفع المعتمدة
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-space-xs">
-                {['شام كاش', 'سيريتل كاش', 'MTN كاش', 'حوالة بنكية'].map((method) => (
+              <div
+                className={`grid grid-cols-2 ${
+                  typeof walletBalance === 'number' ? 'sm:grid-cols-5' : 'sm:grid-cols-4'
+                } gap-space-xs`}
+              >
+                {[
+                  ...(typeof walletBalance === 'number' ? ['محفظة الأثر'] : []),
+                  'شام كاش',
+                  'سيريتل كاش',
+                  'MTN كاش',
+                  'حوالة بنكية',
+                ].map((method) => (
                   <button
                     key={method}
                     type="button"
-                    onClick={() => setPaymentMethod(method)}
-                    className={`py-space-xs px-1 rounded-xl font-body-sm text-[12px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                    onClick={() => {
+                      setPaymentMethod(method);
+                      setPaymentError('');
+                    }}
+                    className={`py-space-xs px-1.5 rounded-xl font-body-sm text-[12px] font-semibold transition-all cursor-pointer whitespace-nowrap ${
                       paymentMethod === method
                         ? 'bg-primary text-on-primary shadow-sm'
                         : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high'
@@ -216,6 +260,35 @@ export function DonationModal({
                   </button>
                 ))}
               </div>
+              {typeof walletBalance === 'number' && paymentMethod === 'محفظة الأثر' && (
+                <p className="font-body-sm text-[12px] text-secondary font-semibold pt-0.5">
+                  الرصيد المتاح في المحفظة: {walletBalance.toLocaleString('en-US')} ل.س
+                </p>
+              )}
+              {paymentError && (
+                <p className="font-body-sm text-[12px] text-error font-semibold">{paymentError}</p>
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-4 pt-0.5 text-[12.5px] text-on-surface-variant">
+              <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={isSadaqah}
+                  onChange={(e) => setIsSadaqah(e.target.checked)}
+                  className="w-4 h-4 accent-secondary rounded cursor-pointer"
+                />
+                <span>صدقة جارية / عن الغير</span>
+              </label>
+              <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={isZakat}
+                  onChange={(e) => setIsZakat(e.target.checked)}
+                  className="w-4 h-4 accent-primary rounded cursor-pointer"
+                />
+                <span>احتساب من الزكاة</span>
+              </label>
             </div>
 
             <div className="space-y-1">
@@ -414,6 +487,7 @@ interface UtilityModalProps {
   activePortal: PortalRole;
   currentUser?: AuthenticatedUser | null;
   onUpdateUser?: (user: AuthenticatedUser) => void;
+  onOpenDonorPortal?: () => void;
   onLogout?: () => void;
   onGoToLogin?: () => void;
   onClose: () => void;
@@ -432,6 +506,7 @@ export function UtilityModal({
   activePortal,
   currentUser,
   onUpdateUser,
+  onOpenDonorPortal,
   onLogout,
   onGoToLogin,
   onClose,
@@ -740,12 +815,25 @@ export function UtilityModal({
                           <span>تعديل معلومات الحساب</span>
                         </button>
                       )}
+                      {onOpenDonorPortal && currentUser.role === 'donor' && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onClose();
+                            onOpenDonorPortal();
+                          }}
+                          className="w-full h-11 rounded-xl bg-secondary text-on-secondary font-title-md text-[15px] font-bold hover:bg-on-secondary-container transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                          <AppIcon name="dashboard" size={18} />
+                          <span>فتح بوابة المتبرع ولوحة الأثر</span>
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={onClose}
                         className="w-full h-11 rounded-xl bg-primary text-on-primary font-title-md text-[15px] hover:bg-primary-container transition-colors cursor-pointer"
                       >
-                        متابعة التصفح في صفحة المتبرع
+                        متابعة التصفح
                       </button>
                       {onLogout && (
                         <button
