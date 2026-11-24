@@ -1,5 +1,3 @@
-import atharIcon from '../assets/Athar_icon.png';
-
 export type PortalRole =
   | 'home'
   | 'patient-portal'
@@ -87,7 +85,7 @@ export interface PartnerItem {
   casesCount: number;
 }
 
-export const ATHAR_LOGO_URL = atharIcon;
+export const ATHAR_LOGO_URL = '/assets/aistudio/Athar_icon_586679a2.png';
 
 export const HERO_VISUAL_URL =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuBAGa1HcJKF0HO-y5ac5jw_eHcyOwl3u9TlL-TFdC7zGveA93Ms_JPrMYWMMUwzLgf18M6Pz65mHJOQOU5MbeXgUo1PH_B2RpXeCiFeC28jLdcNa7VbAWVDjD5UnNLdg5s2V7Ynxblal9tsx0kBP_2xEOSjHyMZSBkFRUZR8Tucmt-S6U3HchueMqeh_bqZ8gy9XoMSUZQGafsD5uqL3N6Lap3lELTbEjr9t-Z1M0NV';
